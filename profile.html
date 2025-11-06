@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - Streamflix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #030712; 
+            color: #f3f4f6; 
+        }
+        .profile-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2);
+        }
+        .edit-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .edit-input:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm p-4 shadow-xl border-b border-green-900/30">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="film" class="h-8 w-8 text-green-600"></i>
+                <h1 class="text-3xl font-extrabold text-white tracking-wider">Streamflix</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-lg font-semibold">
+                <a href="index.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="home" class="w-5 h-5 mr-1"></i> Accueil
+                </a>
+                <a href="films.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="clapperboard" class="w-5 h-5 mr-1"></i> Films
+                </a>
+                <a href="series.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="monitor" class="w-5 h-5 mr-1"></i> Séries
+                </a>
+                <a href="my_list.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="list" class="w-5 h-5 mr-1"></i> Ma Liste
+                </a>
+            </nav>
+            <div class="flex items-center space-x-6">
+                <a href="profile.html" class="text-green-500 border-b-2 border-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
+                    <span id="headerUserName">Utilisateur</span>
+                </a>
+                <a href="logout.html" class="text-gray-300 hover:text-green-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-6 w-6"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-6xl mx-auto">
+            <!-- En-tête du profil -->
+            <div class="text-center mb-12 animate-fade-in">
+                <h1 class="text-5xl font-extrabold text-white mb-4 flex items-center justify-center">
+                    <i data-lucide="user" class="w-12 h-12 text-green-500 mr-4"></i>
+                    Mon Profil
+                </h1>
+                <p class="text-xl text-gray-400">Gérez vos informations personnelles et vos préférences</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Colonne de gauche : Informations du profil -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Carte d'informations personnelles -->
+                    <div class="profile-card rounded-2xl p-8 shadow-2xl animate-fade-in">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-white">Informations personnelles</h2>
+                            <button onclick="toggleEditMode()" id="editProfileBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+                                <i data-lucide="edit-3" class="w-4 h-4 mr-2"></i>
+                                Modifier
+                            </button>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- Photo de profil -->
+                            <div class="flex items-center space-x-6">
+                                <div class="relative">
+                                    <img id="profileAvatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80" 
+                                         alt="Photo de profil" 
+                                         class="w-24 h-24 rounded-full object-cover border-4 border-green-500">
+                                    <button onclick="changeAvatar()" class="absolute bottom-0 right-0 bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition duration-300">
+                                        <i data-lucide="camera" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                <div>
+                                    <h3 id="profileName" class="text-xl font-semibold text-white">Utilisateur Streamflix</h3>
+                                    <p id="profileEmail" class="text-gray-400">user@streamflix.ci</p>
+                                    <p class="text-sm text-gray-500">Membre depuis <span id="memberSince">2024</span></p>
+                                </div>
+                            </div>
+
+                            <!-- Formulaire d'édition -->
+                            <div id="editForm" class="hidden space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Nom complet</label>
+                                        <input type="text" id="editName" class="edit-input w-full px-4 py-3 rounded-lg text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                                        <input type="email" id="editEmail" class="edit-input w-full px-4 py-3 rounded-lg text-white">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Téléphone</label>
+                                        <input type="tel" id="editPhone" class="edit-input w-full px-4 py-3 rounded-lg text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-300 mb-2">Date de naissance</label>
+                                        <input type="date" id="editBirthdate" class="edit-input w-full px-4 py-3 rounded-lg text-white">
+                                    </div>
+                                </div>
+                                <div class="flex space-x-4">
+                                    <button onclick="saveProfile()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition duration-300 flex items-center">
+                                        <i data-lucide="save" class="w-4 h-4 mr-2"></i>
+                                        Enregistrer
+                                    </button>
+                                    <button onclick="cancelEdit()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition duration-300 flex items-center">
+                                        <i data-lucide="x" class="w-4 h-4 mr-2"></i>
+                                        Annuler
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Informations en lecture seule -->
+                            <div id="viewMode" class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-1">Nom complet</label>
+                                        <p id="viewName" class="text-white font-semibold">Utilisateur Streamflix</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                                        <p id="viewEmail" class="text-white font-semibold">user@streamflix.ci</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-1">Téléphone</label>
+                                        <p id="viewPhone" class="text-white font-semibold">+225 07 00 00 00 00</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-400 mb-1">Date de naissance</label>
+                                        <p id="viewBirthdate" class="text-white font-semibold">01/01/1990</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques -->
+                    <div class="profile-card rounded-2xl p-8 shadow-2xl animate-fade-in">
+                        <h2 class="text-2xl font-bold text-white mb-6">Mes Statistiques</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="stat-card rounded-xl p-6 text-center">
+                                <div class="text-blue-500 mb-3">
+                                    <i data-lucide="film" class="w-8 h-8 mx-auto"></i>
+                                </div>
+                                <h3 class="text-3xl font-bold text-white mb-2" id="moviesCount">12</h3>
+                                <p class="text-gray-400">Films regardés</p>
+                            </div>
+                            <div class="stat-card rounded-xl p-6 text-center">
+                                <div class="text-purple-500 mb-3">
+                                    <i data-lucide="monitor" class="w-8 h-8 mx-auto"></i>
+                                </div>
+                                <h3 class="text-3xl font-bold text-white mb-2" id="seriesCount">8</h3>
+                                <p class="text-gray-400">Séries suivies</p>
+                            </div>
+                            <div class="stat-card rounded-xl p-6 text-center">
+                                <div class="text-green-500 mb-3">
+                                    <i data-lucide="clock" class="w-8 h-8 mx-auto"></i>
+                                </div>
+                                <h3 class="text-3xl font-bold text-white mb-2" id="watchTime">42h</h3>
+                                <p class="text-gray-400">Temps de visionnage</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonne de droite : Actions et préférences -->
+                <div class="space-y-8">
+                    <!-- Actions rapides -->
+                    <div class="profile-card rounded-2xl p-6 shadow-2xl animate-fade-in">
+                        <h2 class="text-xl font-bold text-white mb-4">Actions rapides</h2>
+                        <div class="space-y-3">
+                            <a href="my_list.html" class="flex items-center space-x-3 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition duration-300">
+                                <i data-lucide="bookmark" class="w-5 h-5 text-green-500"></i>
+                                <span class="text-white">Voir ma liste</span>
+                            </a>
+                            <button onclick="changePassword()" class="w-full flex items-center space-x-3 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition duration-300">
+                                <i data-lucide="key" class="w-5 h-5 text-blue-500"></i>
+                                <span class="text-white">Changer le mot de passe</span>
+                            </button>
+                            <button onclick="exportData()" class="w-full flex items-center space-x-3 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition duration-300">
+                                <i data-lucide="download" class="w-5 h-5 text-yellow-500"></i>
+                                <span class="text-white">Exporter mes données</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Préférences -->
+                    <div class="profile-card rounded-2xl p-6 shadow-2xl animate-fade-in">
+                        <h2 class="text-xl font-bold text-white mb-4">Préférences</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-300">Notifications email</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-300">Lecture automatique</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-300">Qualité HD par défaut</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Abonnement -->
+                    <div class="profile-card rounded-2xl p-6 shadow-2xl animate-fade-in">
+                        <h2 class="text-xl font-bold text-white mb-4">Mon Abonnement</h2>
+                        <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-4 text-center">
+                            <i data-lucide="crown" class="w-8 h-8 text-yellow-400 mx-auto mb-2"></i>
+                            <h3 class="text-lg font-bold text-white">Premium</h3>
+                            <p class="text-green-100 text-sm">Actif jusqu'au 31/12/2024</p>
+                        </div>
+                        <button class="w-full mt-4 bg-yellow-600 hover:bg-yellow-700 text-white py-2 rounded-lg transition duration-300">
+                            Gérer l'abonnement
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 border-t border-green-900/30 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center text-gray-500">
+            <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
+            <p class="mt-2 text-sm">Votre plateforme de streaming préférée</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+
+        // Données utilisateur
+        let userProfile = {
+            name: "Utilisateur Streamflix",
+            email: "user@streamflix.ci",
+            phone: "+225 07 00 00 00 00",
+            birthdate: "1990-01-01",
+            avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
+            memberSince: "2024",
+            stats: {
+                movies: 12,
+                series: 8,
+                watchTime: "42h"
+            }
+        };
+
+        // Charger le profil au démarrage
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            loadUserProfile();
+        });
+
+        // Vérifier l'authentification
+        function checkAuthentication() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Charger les données depuis le localStorage si disponibles
+            const savedProfile = localStorage.getItem('userProfile');
+            if (savedProfile) {
+                userProfile = { ...userProfile, ...JSON.parse(savedProfile) };
+            }
+        }
+
+        // Charger les données du profil
+        function loadUserProfile() {
+            // Mettre à jour l'en-tête
+            document.getElementById('headerUserName').textContent = userProfile.name;
+            
+            // Mettre à jour la section profil
+            document.getElementById('profileName').textContent = userProfile.name;
+            document.getElementById('profileEmail').textContent = userProfile.email;
+            document.getElementById('memberSince').textContent = userProfile.memberSince;
+            document.getElementById('profileAvatar').src = userProfile.avatar;
+            
+            // Mode lecture
+            document.getElementById('viewName').textContent = userProfile.name;
+            document.getElementById('viewEmail').textContent = userProfile.email;
+            document.getElementById('viewPhone').textContent = userProfile.phone;
+            document.getElementById('viewBirthdate').textContent = formatDate(userProfile.birthdate);
+            
+            // Remplir le formulaire d'édition
+            document.getElementById('editName').value = userProfile.name;
+            document.getElementById('editEmail').value = userProfile.email;
+            document.getElementById('editPhone').value = userProfile.phone;
+            document.getElementById('editBirthdate').value = userProfile.birthdate;
+            
+            // Statistiques
+            document.getElementById('moviesCount').textContent = userProfile.stats.movies;
+            document.getElementById('seriesCount').textContent = userProfile.stats.series;
+            document.getElementById('watchTime').textContent = userProfile.stats.watchTime;
+        }
+
+        // Basculer entre mode édition et lecture
+        function toggleEditMode() {
+            const editForm = document.getElementById('editForm');
+            const viewMode = document.getElementById('viewMode');
+            const editButton = document.getElementById('editProfileBtn');
+            
+            if (editForm.classList.contains('hidden')) {
+                // Passer en mode édition
+                editForm.classList.remove('hidden');
+                viewMode.classList.add('hidden');
+                editButton.innerHTML = '<i data-lucide="x" class="w-4 h-4 mr-2"></i>Annuler';
+                editButton.onclick = cancelEdit;
+                editButton.className = 'bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center';
+            } else {
+                // Revenir en mode lecture
+                cancelEdit();
+            }
+        }
+
+        // Annuler l'édition
+        function cancelEdit() {
+            document.getElementById('editForm').classList.add('hidden');
+            document.getElementById('viewMode').classList.remove('hidden');
+            
+            const editButton = document.getElementById('editProfileBtn');
+            editButton.innerHTML = '<i data-lucide="edit-3" class="w-4 h-4 mr-2"></i>Modifier';
+            editButton.onclick = toggleEditMode;
+            editButton.className = 'bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center';
+            
+            // Réinitialiser les valeurs du formulaire
+            loadUserProfile();
+        }
+
+        // Sauvegarder le profil
+        function saveProfile() {
+            // Récupérer les nouvelles valeurs
+            userProfile.name = document.getElementById('editName').value;
+            userProfile.email = document.getElementById('editEmail').value;
+            userProfile.phone = document.getElementById('editPhone').value;
+            userProfile.birthdate = document.getElementById('editBirthdate').value;
+            
+            // Sauvegarder dans le localStorage
+            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+            
+            // Mettre à jour l'affichage
+            loadUserProfile();
+            
+            // Revenir en mode lecture
+            cancelEdit();
+            
+            // Afficher une notification
+            showNotification('✅ Profil mis à jour avec succès !', 'success');
+        }
+
+        // Changer la photo de profil
+        function changeAvatar() {
+            // Simuler un changement d'avatar
+            const newAvatar = prompt('Entrez l\'URL de votre nouvelle photo de profil:', userProfile.avatar);
+            if (newAvatar) {
+                userProfile.avatar = newAvatar;
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                loadUserProfile();
+                showNotification('✅ Photo de profil mise à jour !', 'success');
+            }
+        }
+
+        // Changer le mot de passe
+        function changePassword() {
+            const newPassword = prompt('Entrez votre nouveau mot de passe:');
+            if (newPassword) {
+                showNotification('✅ Mot de passe changé avec succès !', 'success');
+            }
+        }
+
+        // Exporter les données
+        function exportData() {
+            showNotification('📥 Préparation de l\'export de vos données...', 'info');
+            setTimeout(() => {
+                showNotification('✅ Données exportées avec succès !', 'success');
+            }, 2000);
+        }
+
+        // Formater la date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR');
+        }
+
+        // Afficher une notification
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-600',
+                error: 'bg-red-600',
+                info: 'bg-blue-600',
+                warning: 'bg-yellow-600'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Gestion des préférences
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const preference = this.closest('div').querySelector('span').textContent;
+                const state = this.checked ? 'activée' : 'désactivée';
+                showNotification(`⚙️ ${preference} ${state}`, 'info');
+            });
+        });
+    </script>
+</body>
+</html>

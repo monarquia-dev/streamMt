@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films - Streamflix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/streamflix.js"></script>
+    <style>
+        .movie-card {
+            transition: all 0.3s ease;
+        }
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.3);
+        }
+        .filter-active {
+            background: #ef4444;
+            color: white;
+        }
+        .poster-hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full z-50 bg-gradient-to-b from-black to-transparent transition-all duration-300">
+        <div class="flex justify-between items-center px-6 md:px-12 py-4">
+            <div class="flex items-center space-x-10">
+                <h1 class="text-3xl font-bold text-red-500">STREAMFLIX</h1>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Accueil</a>
+                    <a href="films.html" class="text-red-500 border-b-2 border-red-500 font-semibold transition-all duration-300">Films</a>
+                    <a href="series.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Séries</a>
+                    <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Ma Liste</a>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
+                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
+                    Utilisateur
+                </a>
+                <a href="login.html" class="text-gray-300 hover:text-red-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-6 w-6"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 pt-32 pb-20">
+        <!-- En-tête -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-white mb-4 flex items-center justify-center">
+                <i data-lucide="clapperboard" class="w-12 h-12 text-red-500 mr-4"></i>
+                Films
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Découvrez notre vaste collection de films, des classiques aux dernières nouveautés
+            </p>
+        </div>
+
+        <!-- Barre de recherche et filtres -->
+        <div class="mb-10 bg-gray-900 rounded-2xl p-6 shadow-lg border border-gray-800">
+            <div class="flex flex-col lg:flex-row gap-6 items-end">
+                <!-- Recherche -->
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Rechercher un film</label>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Titre, réalisateur, acteur..."
+                               class="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 transition duration-300">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- Filtres -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <!-- Genre -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Genre</label>
+                        <select id="genreFilter" class="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 transition duration-300">
+                            <option value="">Tous les genres</option>
+                            <option value="action">Action</option>
+                            <option value="science-fiction">Science-Fiction</option>
+                            <option value="drame">Drame</option>
+                            <option value="comedie">Comédie</option>
+                            <option value="thriller">Thriller</option>
+                            <option value="horreur">Horreur</option>
+                            <option value="aventure">Aventure</option>
+                        </select>
+                    </div>
+
+                    <!-- Année -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Année</label>
+                        <select id="yearFilter" class="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-red-500 transition duration-300">
+                            <option value="">Toutes les années</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2010-2018">2010-2018</option>
+                            <option value="2000-2009">2000-2009</option>
+                            <option value="1990-1999">1990-1999</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-2">
+                    <button onclick="applyFilters()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 flex items-center">
+                        <i data-lucide="filter" class="w-5 h-5 mr-2"></i>
+                        Filtrer
+                    </button>
+                    <button onclick="clearFilters()" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 flex items-center">
+                        <i data-lucide="x" class="w-5 h-5 mr-2"></i>
+                        Effacer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Résultats de recherche -->
+            <div id="searchResults" class="mt-4 text-gray-300 hidden">
+                <p id="resultsText"></p>
+            </div>
+        </div>
+
+        <!-- Grille des films -->
+        <div id="moviesContainer">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                <!-- Les films seront chargés dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Message vide -->
+        <div id="emptyMessage" class="text-center py-20 bg-gray-900 rounded-xl border border-gray-800 hidden">
+            <i data-lucide="film" class="w-16 h-16 mx-auto text-red-600 mb-4"></i>
+            <h3 class="text-2xl font-bold text-gray-300 mb-4">Aucun film trouvé</h3>
+            <p class="text-gray-400 mb-6">Essayez de modifier vos critères de recherche</p>
+            <button onclick="clearFilters()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 inline-flex items-center">
+                <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                Voir tous les films
+            </button>
+        </div>
+
+        <!-- Chargement -->
+        <div id="loadingIndicator" class="text-center py-12 hidden">
+            <div class="flex items-center justify-center space-x-3">
+                <i data-lucide="loader-2" class="w-6 h-6 text-red-500 animate-spin"></i>
+                <span class="text-gray-400">Chargement des films...</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DÉTAILS FILM -->
+    <div id="movieModal" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 p-4 hidden">
+        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalMovieTitle" class="text-2xl font-bold text-white">Titre</h3>
+                <button onclick="closeMovieModal()" 
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Image -->
+                    <div class="md:col-span-1">
+                        <img id="modalMovieImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="md:col-span-2">
+                        <div class="flex flex-wrap items-center gap-4 mb-4">
+                            <span id="modalMovieYear" class="text-lg font-semibold text-gray-300"></span>
+                            <span id="modalMovieDuration" class="text-lg text-gray-400"></span>
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
+                                <span id="modalMovieRating" class="text-lg font-semibold"></span>
+                            </div>
+                            <span id="modalMovieGenre" class="border border-gray-400 px-2 py-1 rounded text-sm"></span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white mb-2">Réalisation :</h4>
+                            <p id="modalMovieDirector" class="text-gray-300"></p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white mb-2">Casting :</h4>
+                            <p id="modalMovieActors" class="text-gray-300"></p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-white mb-2">Synopsis :</h4>
+                            <p id="modalMovieSynopsis" class="text-gray-300 leading-relaxed"></p>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="playTrailerBtn" onclick="playMovieTrailer()" 
+                                    class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="play" class="h-5 w-5"></i>
+                                <span>Voir le trailer</span>
+                            </button>
+                            <button id="addToListBtn" onclick="addMovieToMyList()" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="plus" class="h-5 w-5"></i>
+                                <span>Ajouter à ma liste</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDÉO -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-95 flex justify-center items-center z-50 hidden">
+        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalTitle" class="text-xl font-bold">Lecture en cours</h3>
+                <button onclick="closeVideoModal()" 
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            <video id="videoPlayer" controls class="w-full rounded-b-2xl focus:outline-none">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 py-12">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Données des films
+        const moviesData = [
+            {
+                id: 1,
+                title: 'Inception',
+                image_url: 'img/inception.webp',
+                year: 2010,
+                rating: 8.8,
+                genre: 'science-fiction',
+                duration: '2h28min',
+                director: 'Christopher Nolan',
+                actors: 'Leonardo DiCaprio, Marion Cotillard, Tom Hardy',
+                synopsis: 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en s\'infiltrant dans leurs rêves.',
+                trailer_url: 'assets/videos/inception.mp4',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+            {
+                id: 2,
+                title: 'Avatar',
+                image_url: 'img/avatar.jpg',
+                year: 2009,
+                rating: 7.8,
+                genre: 'science-fiction',
+                duration: '2h42min',
+                director: 'James Cameron',
+                actors: 'Sam Worthington, Zoe Saldana, Sigourney Weaver',
+                synopsis: 'Un marine paraplégique est envoyé sur la lune Pandora où il trouve une nouvelle raison de vivre.',
+                trailer_url: 'assets/videos/avatar.mp4',
+                hd: true,
+                ultra_hd: false,
+                nouveaute: false
+            },
+            {
+                id: 3,
+                title: 'CHANG CAN DUNK',
+                image_url: 'img/changcandunk_poster.jpeg',
+                year: 2023,
+                rating: 7.5,
+                genre: 'action',
+                duration: '1h45min',
+                director: 'Jingyi Shao',
+                actors: 'Bloom Li, Ben Wang, Zoe Renee',
+                synopsis: 'Un jeune basketteur passionné rêve de réaliser un dunk parfait.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: true
+            },
+            {
+                id: 4,
+                title: 'Fast & Furious X',
+                image_url: 'img/fast.jpg',
+                year: 2023,
+                rating: 6.0,
+                genre: 'action',
+                duration: '2h21min',
+                director: 'Louis Leterrier',
+                actors: 'Vin Diesel, Michelle Rodriguez, Jason Momoa',
+                synopsis: 'Dom Toretto et sa famille affrontent leur ennemi le plus redoutable.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: true
+            },
+            {
+                id: 5,
+                title: 'The Dark Knight',
+                image_url: 'https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                year: 2008,
+                rating: 9.0,
+                genre: 'action',
+                duration: '2h32min',
+                director: 'Christopher Nolan',
+                actors: 'Christian Bale, Heath Ledger, Aaron Eckhart',
+                synopsis: 'Batman affronte le Joker, un criminel psychotique qui veut semer le chaos à Gotham.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                hd: true,
+                ultra_hd: false,
+                nouveaute: false
+            },
+            {
+                id: 6,
+                title: 'Avengers: Endgame',
+                image_url: 'img/ave.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: 'Anthony et Joe Russo',
+                actors: 'Robert Downey Jr., Chris Evans, Mark Ruffalo',
+                synopsis: 'Les Avengers tentent de restaurer l\'univers après le claquement de doigts de Thanos.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+             {
+                id: 7,
+                title: 'The italian job',
+                image_url: 'img/u.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'drame',
+                duration: '3h01min',
+                director: '',
+                actors: ' Kad Merad',
+                synopsis: 'Dino Fabrizzi est un vendeur de Maserati à Nice dont la vie parfaite est basée sur un mensonge. Il doit faire face à sa double identité lorsque le ramadan approche et qu\'il doit assumer sa promesse de faire le ramadan à la place de son père malade',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+            {
+                id: 8,
+                title: '',
+                image_url: 'img/photo_2019-09-10_09-05-59.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 9,
+                title: '',
+                image_url: 'img/photo_2023-01-20_21-54-00.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 10,
+                title: '',
+                image_url: 'img/drago.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 11,
+                title: '',
+                image_url: 'img/lood.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 12,
+                title: 'equalizer',
+                image_url: 'img/the-equalizer.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 13,
+                title: 'reel-steel',
+                image_url: 'img/reel-steel.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 14,
+                title: 'Ava',
+                image_url: 'img/ava.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 15,
+                title: '',
+                image_url: 'img/chaoli.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },{
+                id: 16,
+                title: '',
+                image_url: 'img/offli.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+            {
+                id: 17,
+                title: '',
+                image_url: 'img/war.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+            {
+                id: 18,
+                title: '',
+                image_url: 'img/la-lege.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+            {
+                id: 19,
+                title: '',
+                image_url: 'img/photo_2025-06-26_15-01-50.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+            {
+                id: 20,
+                title: '',
+                image_url: 'img/photo_2025-06-26_15-03-02.jpg',
+                year: 2019,
+                rating: 8.4,
+                genre: 'action',
+                duration: '3h01min',
+                director: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                hd: true,
+                ultra_hd: true,
+                nouveaute: false
+            },
+        ];
+
+        let filteredMovies = [...moviesData];
+        let currentSelectedMovie = null;
+        let currentVideo = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            displayMovies(moviesData);
+            setupEventListeners();
+        });
+
+        // Afficher les films
+        function displayMovies(movies) {
+            const container = document.getElementById('moviesContainer');
+            const emptyMessage = document.getElementById('emptyMessage');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            loadingIndicator.classList.add('hidden');
+
+            if (movies.length === 0) {
+                container.classList.add('hidden');
+                emptyMessage.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyMessage.classList.add('hidden');
+
+            const grid = container.querySelector('.grid') || container;
+            grid.innerHTML = movies.map(movie => `
+                <div class="movie-card group relative rounded-xl overflow-hidden bg-gray-800 border border-gray-700 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="${movie.image_url}" 
+                             alt="${movie.title}"
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                             onclick="openMovieModal(${movie.id})"
+                             onerror="this.src='https://placehold.co/400x600/1f2937/9ca3af?text=Image+Indisponible'">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            ${movie.nouveaute ? '<span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>' : ''}
+                            ${movie.ultra_hd ? '<span class="bg-purple-500 px-2 py-1 rounded text-xs font-bold">4K</span>' : 
+                              movie.hd ? '<span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>' : ''}
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1 text-yellow-400">
+                                <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                                <span class="text-xs font-semibold">${movie.rating}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">${movie.title}</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>${movie.year}</span>
+                                    <span>${movie.duration}</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openMovieModal(${movie.id})" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); playTrailer('${movie.trailer_url}', '${movie.title}')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyList(${movie.id}, 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Configurer les écouteurs d'événements
+        function setupEventListeners() {
+            // Recherche en temps réel
+            document.getElementById('searchInput').addEventListener('input', function() {
+                applyFilters();
+            });
+
+            // Filtres automatiques
+            document.getElementById('genreFilter').addEventListener('change', applyFilters);
+            document.getElementById('yearFilter').addEventListener('change', applyFilters);
+        }
+
+        // Appliquer les filtres
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const selectedGenre = document.getElementById('genreFilter').value;
+            const selectedYear = document.getElementById('yearFilter').value;
+
+            filteredMovies = moviesData.filter(movie => {
+                const genreMatch = !selectedGenre || movie.genre === selectedGenre;
+                const searchMatch = !searchTerm || 
+                    movie.title.toLowerCase().includes(searchTerm) ||
+                    movie.director.toLowerCase().includes(searchTerm) ||
+                    movie.actors.toLowerCase().includes(searchTerm);
+                
+                // Filtre par année
+                let yearMatch = true;
+                if (selectedYear) {
+                    if (selectedYear.includes('-')) {
+                        const [start, end] = selectedYear.split('-').map(Number);
+                        yearMatch = movie.year >= start && movie.year <= end;
+                    } else {
+                        yearMatch = movie.year === parseInt(selectedYear);
+                    }
+                }
+
+                return genreMatch && searchMatch && yearMatch;
+            });
+
+            displayMovies(filteredMovies);
+            updateSearchResults(searchTerm, selectedGenre, selectedYear);
+        }
+
+        // Effacer les filtres
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('genreFilter').value = '';
+            document.getElementById('yearFilter').value = '';
+            filteredMovies = [...moviesData];
+            displayMovies(filteredMovies);
+            document.getElementById('searchResults').classList.add('hidden');
+        }
+
+        // Mettre à jour les résultats de recherche
+        function updateSearchResults(searchTerm, genre, year) {
+            const resultsElement = document.getElementById('searchResults');
+            const resultsText = document.getElementById('resultsText');
+
+            if (!searchTerm && !genre && !year) {
+                resultsElement.classList.add('hidden');
+                return;
+            }
+
+            let text = `${filteredMovies.length} film(s) trouvé(s)`;
+            if (searchTerm) text += ` pour "${searchTerm}"`;
+            if (genre) text += ` dans ${genre}`;
+            if (year) text += ` en ${year}`;
+
+            resultsText.textContent = text;
+            resultsElement.classList.remove('hidden');
+        }
+
+        // Ouvrir le modal des détails du film
+        function openMovieModal(movieId) {
+            const movie = moviesData.find(m => m.id === movieId);
+            if (movie) {
+                currentSelectedMovie = movie;
+                
+                const modal = document.getElementById('movieModal');
+                document.getElementById('modalMovieTitle').textContent = movie.title;
+                document.getElementById('modalMovieImage').src = movie.image_url;
+                document.getElementById('modalMovieImage').alt = movie.title;
+                document.getElementById('modalMovieYear').textContent = movie.year;
+                document.getElementById('modalMovieDuration').textContent = movie.duration;
+                document.getElementById('modalMovieRating').textContent = movie.rating;
+                document.getElementById('modalMovieGenre').textContent = movie.genre;
+                document.getElementById('modalMovieDirector').textContent = movie.director;
+                document.getElementById('modalMovieActors').textContent = movie.actors;
+                document.getElementById('modalMovieSynopsis').textContent = movie.synopsis;
+                
+                // Réinitialiser le bouton d'ajout
+                const addButton = document.getElementById('addToListBtn');
+                addButton.disabled = false;
+                addButton.innerHTML = '<i data-lucide="plus" class="h-5 w-5"></i><span>Ajouter à ma liste</span>';
+                addButton.className = 'bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1';
+                
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                lucide.createIcons();
+            }
+        }
+
+        // Fermer le modal des détails du film
+        function closeMovieModal() {
+            const modal = document.getElementById('movieModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentSelectedMovie = null;
+        }
+
+        // Gestion de la modal vidéo
+        function openVideoModal(videoSrc, title) {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            currentVideo = player;
+            
+            if (title) {
+                modalTitle.textContent = title;
+            }
+            
+            player.src = videoSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.add('hidden');
+            if (currentVideo) {
+                currentVideo.pause();
+                currentVideo.src = '';
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        // Jouer le trailer depuis le modal
+        function playMovieTrailer() {
+            if (currentSelectedMovie && currentSelectedMovie.trailer_url) {
+                closeMovieModal();
+                openVideoModal(currentSelectedMovie.trailer_url, currentSelectedMovie.title);
+            } else {
+                alert('Trailer non disponible pour le moment');
+            }
+        }
+
+        // Ajouter le film à ma liste depuis le modal
+        function addMovieToMyList() {
+            if (!currentSelectedMovie) return;
+            
+            const button = document.getElementById('addToListBtn');
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i><span>Ajout en cours...</span>';
+            
+            // Simuler l'ajout à la liste
+            setTimeout(() => {
+                button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i><span>Ajouté !</span>';
+                button.className = 'bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1';
+                showNotification('✓ Ajouté à votre liste !');
+            }, 1000);
+            
+            lucide.createIcons();
+        }
+
+        // Fonctions globales pour les boutons
+        function playTrailer(trailerUrl, title) {
+            openVideoModal(trailerUrl, title);
+        }
+
+        function addToMyList(contentId, contentType) {
+            // Simulation d'ajout à la liste
+            showNotification('✓ Ajouté à votre liste !');
+        }
+
+        // Afficher une notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fermer les modals avec ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMovieModal();
+                closeVideoModal();
+            }
+        });
+
+        // Clic en dehors des modals pour fermer
+        document.getElementById('movieModal').addEventListener('click', (e) => {
+            if (e.target.id === 'movieModal') {
+                closeMovieModal();
+            }
+        });
+
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'videoModal') {
+                closeVideoModal();
+            }
+        });
+    </script>
+</body>
+</html>

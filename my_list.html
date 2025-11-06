@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Liste - Streamflix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #030712; 
+            color: #f3f4f6; 
+        }
+        .content-card { 
+            transition: all 0.3s ease; 
+        }
+        .content-card:hover { 
+            transform: translateY(-6px); 
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.3); 
+        }
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm p-4 shadow-xl border-b border-green-900/30">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="film" class="h-8 w-8 text-green-600"></i>
+                <h1 class="text-3xl font-extrabold text-white tracking-wider">Streamflix</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-lg font-semibold">
+                <a href="index.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="home" class="w-5 h-5 mr-1"></i> Accueil
+                </a>
+                <a href="films.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="clapperboard" class="w-5 h-5 mr-1"></i> Films
+                </a>
+                <a href="series.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="monitor" class="w-5 h-5 mr-1"></i> Séries
+                </a>
+                <a href="my_list.html" class="text-green-500 border-b-2 border-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="list" class="w-5 h-5 mr-1"></i> Ma Liste
+                </a>
+            </nav>
+            <div class="flex items-center space-x-6">
+                <a href="profile.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
+                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
+                    Utilisateur
+                </a>
+                <a href="login.html" class="text-gray-300 hover:text-green-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-6 w-6"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="container mx-auto px-4 pt-32 pb-20">
+        <h2 class="text-5xl font-extrabold text-white mb-8 flex items-center">
+            <i data-lucide="bookmark" class="w-12 h-12 text-green-500 mr-4"></i>
+            Ma Liste
+        </h2>
+
+        <div id="myListContent">
+            <!-- Le contenu de la liste sera chargé dynamiquement -->
+        </div>
+
+        <!-- Message liste vide -->
+        <div id="emptyListMessage" class="text-center py-20 bg-gray-900 rounded-xl border border-gray-800 mt-8 hidden">
+            <i data-lucide="bookmark" class="w-16 h-16 mx-auto text-green-600 mb-4"></i>
+            <h3 class="text-2xl font-bold text-gray-300 mb-4">Votre liste est vide</h3>
+            <p class="text-gray-400 mb-6 max-w-md mx-auto">
+                Ajoutez vos films et séries préférés pour les retrouver facilement ici.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="films.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 inline-flex items-center">
+                    <i data-lucide="clapperboard" class="w-5 h-5 mr-2"></i>
+                    Explorer les films
+                </a>
+                <a href="series.html" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 inline-flex items-center">
+                    <i data-lucide="monitor" class="w-5 h-5 mr-2"></i>
+                    Découvrir les séries
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DÉTAILS -->
+    <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 p-4 hidden">
+        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalItemTitle" class="text-2xl font-bold text-white">Titre</h3>
+                <button onclick="closeItemModal()" 
+                        class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1">
+                        <img id="modalItemImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <div class="flex flex-wrap items-center gap-4 mb-4">
+                            <span id="modalItemYear" class="text-lg font-semibold text-gray-300"></span>
+                            <span id="modalItemType" class="bg-green-600 px-3 py-1 rounded-full text-sm font-semibold"></span>
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
+                                <span id="modalItemRating" class="text-lg font-semibold"></span>
+                            </div>
+                            <span id="modalItemGenre" class="border border-gray-400 px-2 py-1 rounded text-sm"></span>
+                        </div>
+                        
+                        <p id="modalItemSynopsis" class="text-gray-300 mb-6 leading-relaxed"></p>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-white mb-2">Ajouté à votre liste le :</h4>
+                            <p id="modalItemAddedAt" class="text-gray-300"></p>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="playItemTrailer()" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="play" class="h-5 w-5"></i>
+                                <span>Voir le trailer</span>
+                            </button>
+                            <button id="removeFromListBtn" onclick="removeFromListModal()" 
+                                    class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="trash-2" class="h-5 w-5"></i>
+                                <span>Retirer de ma liste</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDÉO -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-95 flex justify-center items-center z-50 hidden">
+        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalTitle" class="text-xl font-bold">Lecture en cours</h3>
+                <button onclick="closeVideoModal()" 
+                        class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            <video id="videoPlayer" controls class="w-full rounded-b-2xl focus:outline-none">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 border-t border-green-900/30 py-8">
+        <div class="container mx-auto px-4 text-center text-gray-500">
+            <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
+            <p class="mt-2 text-sm">Votre plateforme de streaming préférée</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+
+        // Clé pour le stockage local
+        const MY_LIST_STORAGE_KEY = 'streamflix_my_list';
+
+        // Données de démonstration pour la liste (seront remplacées par le stockage local)
+        let myListData = [];
+
+        let currentSelectedItem = null;
+        let currentVideo = null;
+
+        // Charger la liste au démarrage
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMyListFromStorage();
+        });
+
+        // Charger la liste depuis le stockage local
+        function loadMyListFromStorage() {
+            const storedList = localStorage.getItem(MY_LIST_STORAGE_KEY);
+            if (storedList) {
+                myListData = JSON.parse(storedList);
+            } else {
+                // Données par défaut si aucune donnée n'est stockée
+                myListData = [
+                    {
+                        'id': 1,
+                        'title': 'Inception',
+                        'image_url': 'img/photo_2025-11-02_09-17-50.jpg',
+                        'year': 2010,
+                        'rating': 8.8,
+                        'genre': 'Science-Fiction',
+                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves.',
+                        'content_type': 'movies',
+                        'trailer_url': 'assets/videos/inception.mp4',
+                        'added_at': '2024-01-15 10:30:00'
+                    }
+                ];
+                saveMyListToStorage();
+            }
+            loadMyList();
+        }
+
+        // Sauvegarder la liste dans le stockage local
+        function saveMyListToStorage() {
+            localStorage.setItem(MY_LIST_STORAGE_KEY, JSON.stringify(myListData));
+        }
+
+        // Charger et afficher la liste
+        function loadMyList() {
+            const myListContent = document.getElementById('myListContent');
+            const emptyListMessage = document.getElementById('emptyListMessage');
+            
+            // Supprimer l'ancien compteur s'il existe
+            const oldCounter = document.querySelector('.list-counter');
+            if (oldCounter) {
+                oldCounter.remove();
+            }
+
+            if (myListData.length === 0) {
+                myListContent.innerHTML = '';
+                emptyListMessage.classList.remove('hidden');
+                return;
+            }
+
+            emptyListMessage.classList.add('hidden');
+
+            // Ajouter le compteur
+            const countDiv = document.createElement('div');
+            countDiv.className = 'list-counter mb-6 text-gray-300 text-lg';
+            countDiv.innerHTML = `<p>Vous avez ${myListData.length} élément(s) dans votre liste</p>`;
+            myListContent.parentNode.insertBefore(countDiv, myListContent);
+
+            // Afficher les éléments
+            myListContent.innerHTML = `
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                    ${myListData.map(item => `
+                        <div class="content-card group relative rounded-xl overflow-hidden bg-gray-800 border border-gray-700 cursor-pointer aspect-[2/3]"
+                             onclick="showItemDetails(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                            <div class="relative w-full h-full">
+                                <img src="${item.image_url}" 
+                                     alt="${item.title}"
+                                     class="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-40"
+                                     onerror="this.onerror=null;this.src='https://placehold.co/400x600/1e293b/9ca3af?text=Image+Indisponible';">
+                                
+                                <!-- Badge type -->
+                                <div class="absolute top-3 left-3">
+                                    <span class="text-xs font-semibold px-2 py-1 rounded ${item.content_type === 'movies' ? 'bg-blue-600' : 'bg-purple-600'}">
+                                        ${item.content_type === 'movies' ? 'FILM' : 'SÉRIE'}
+                                    </span>
+                                </div>
+                                
+                                <!-- Rating -->
+                                <div class="absolute top-3 right-3 bg-black/80 px-2 py-1 rounded-lg">
+                                    <div class="flex items-center space-x-1 text-yellow-400">
+                                        <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                                        <span class="text-xs font-semibold">${item.rating}</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Overlay au hover -->
+                                <div class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                    <h3 class="text-lg font-bold text-green-400 mb-1">${item.title}</h3>
+                                    <div class="flex items-center text-sm text-gray-300 space-x-2 mb-2">
+                                        <span>${item.year}</span>
+                                        <span>•</span>
+                                        <span>${item.genre}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-xs text-gray-400">
+                                        <span>Ajouté le ${formatDate(item.added_at)}</span>
+                                        <button onclick="event.stopPropagation(); removeFromList(${item.id}, '${item.content_type}')" 
+                                                class="text-red-400 hover:text-red-300 transition duration-300">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            lucide.createIcons();
+        }
+
+        // Formater la date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR');
+        }
+
+        // Afficher les détails d'un élément dans la modale
+        function showItemDetails(item) {
+            currentSelectedItem = item;
+            
+            const modal = document.getElementById('itemModal');
+            document.getElementById('modalItemTitle').textContent = item.title;
+            document.getElementById('modalItemImage').src = item.image_url;
+            document.getElementById('modalItemImage').alt = item.title;
+            document.getElementById('modalItemYear').textContent = item.year;
+            document.getElementById('modalItemType').textContent = item.content_type === 'movies' ? 'FILM' : 'SÉRIE';
+            document.getElementById('modalItemRating').textContent = item.rating;
+            document.getElementById('modalItemGenre').textContent = item.genre;
+            document.getElementById('modalItemSynopsis').textContent = item.synopsis;
+            document.getElementById('modalItemAddedAt').textContent = formatDate(item.added_at);
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Fermer la modale
+        function closeItemModal() {
+            const modal = document.getElementById('itemModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentSelectedItem = null;
+        }
+
+        // Gestion de la modal vidéo
+        function openVideoModal(videoSrc, title) {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            currentVideo = player;
+            
+            if (title) {
+                modalTitle.textContent = title;
+            }
+            
+            player.src = videoSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.add('hidden');
+            if (currentVideo) {
+                currentVideo.pause();
+                currentVideo.src = '';
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        // Jouer le trailer depuis la modale
+        function playItemTrailer() {
+            if (currentSelectedItem && currentSelectedItem.trailer_url) {
+                openVideoModal(currentSelectedItem.trailer_url, currentSelectedItem.title);
+            } else {
+                showNotification('🚫 Bande-annonce non disponible', 'error');
+            }
+        }
+
+        // Supprimer un élément de la liste depuis la modale
+        function removeFromListModal() {
+            if (currentSelectedItem) {
+                removeFromList(currentSelectedItem.id, currentSelectedItem.content_type);
+                closeItemModal();
+            }
+        }
+
+        // Supprimer un élément de la liste
+        function removeFromList(id, type) {
+            if (confirm('Êtes-vous sûr de vouloir retirer cet élément de votre liste ?')) {
+                // Retirer l'élément des données
+                const index = myListData.findIndex(item => item.id === id && item.content_type === type);
+                if (index !== -1) {
+                    myListData.splice(index, 1);
+                    saveMyListToStorage();
+                    showNotification('🗑️ Élément retiré de votre liste', 'success');
+                }
+                
+                // Recharger l'affichage
+                loadMyList();
+            }
+        }
+
+        // Afficher une notification
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-600',
+                error: 'bg-red-600',
+                info: 'bg-blue-600'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type] || colors.info} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fonction pour ajouter un élément à la liste (appelée depuis index.html)
+        function addToMyList(itemData) {
+            // Vérifier si l'élément existe déjà
+            const exists = myListData.some(item => 
+                item.id === itemData.id && item.content_type === itemData.content_type
+            );
+            
+            if (!exists) {
+                // Ajouter la date d'ajout
+                itemData.added_at = new Date().toISOString();
+                myListData.push(itemData);
+                saveMyListToStorage();
+                showNotification('✅ Ajouté à votre liste !', 'success');
+                return true;
+            } else {
+                showNotification('ℹ️ Déjà dans votre liste', 'info');
+                return false;
+            }
+        }
+
+        // Fonction pour vérifier si un élément est dans la liste
+        function isInMyList(id, type) {
+            return myListData.some(item => item.id === id && item.content_type === type);
+        }
+
+        // Fermer les modales avec ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeItemModal();
+                closeVideoModal();
+            }
+        });
+
+        // Fermer les modales en cliquant à l'extérieur
+        document.getElementById('itemModal').addEventListener('click', (e) => {
+            if (e.target.id === 'itemModal') {
+                closeItemModal();
+            }
+        });
+
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'videoModal') {
+                closeVideoModal();
+            }
+        });
+    </script>
+       <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fonction pour charger les parties communes (header, footer)
+            async function loadPartials() {
+                try {
+                    const headerResponse = await fetch('header.html');
+                    const headerHtml = await headerResponse.text();
+                    document.getElementById('header-placeholder').innerHTML = headerHtml;
+
+                    const footerResponse = await fetch('footer.html');
+                    const footerHtml = await footerResponse.text();
+                    document.getElementById('footer-placeholder').innerHTML = footerHtml;
+                } catch (error) {
+                    console.error('Erreur lors du chargement des parties communes:', error);
+                }
+            }
+
+            loadPartials().then(() => {
+                // Initialisation de la logique du mode sombre/clair
+                const darkModeToggle = document.getElementById('dark-mode-toggle');
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-mode');
+                    const icon = document.querySelector('#dark-mode-toggle i');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                }
+                darkModeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                    const icon = document.querySelector('#dark-mode-toggle i');
+                    if (document.body.classList.contains('light-mode')) {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                        localStorage.setItem('theme', 'dark');
+                    }
+                });
+
+                // Initialisation de la logique du profil et déconnexion
+                const currentUser = StreamflixDB.getCurrentUser();
+                const profilePicNav = document.getElementById('profile-pic-nav');
+                const navUsername = document.getElementById('nav-username');
+                const profileDropdownToggle = document.getElementById('profile-dropdown-toggle');
+                const profileDropdownContent = document.querySelector('.profile-dropdown-content');
+                const logoutButton = document.getElementById('logout-button');
+
+                if (currentUser) {
+                    profilePicNav.src = currentUser.profile_pic_url || 'images/profiles/default.svg';
+                    navUsername.textContent = currentUser.name;
+if (currentUser.role === 'admin') {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = 'admin.html';
+                        adminLink.id = 'admin-page-link';
+                        adminLink.className = 'block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors';
+                        adminLink.textContent = 'Page Admin';
+                        // Insérer avant le bouton de déconnexion
+                        logoutButton.before(adminLink);
+                    }
+                } else {
+                    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+                    window.location.href = 'login.html';
+                }
+
+                profileDropdownToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    profileDropdownContent.classList.toggle('hidden');
+                });
+                
+                window.addEventListener('click', (e) => {
+                    if (!profileDropdownToggle.contains(e.target) && !profileDropdownContent.contains(e.target)) {
+                        profileDropdownContent.classList.add('hidden');
+                    }
+                });
+
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    StreamflixDB.setCurrentUser(null);
+                    window.location.href = 'login.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

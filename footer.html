@@ -1,0 +1,118 @@
+<div id="footer-placeholder"></div>
+
+<!-- Le contenu du pied de page (section contact) -->
+<section id="contact" class="py-16 bg-gray-900 rounded-xl shadow-2xl text-center">
+    <h2 class="text-4xl font-extrabold mb-8 text-white">Contactez-nous</h2>
+    <p class="text-gray-400 mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
+        Des questions, des suggestions ou juste envie de dire bonjour ? N'hésitez pas à nous contacter ! Nous sommes là pour vous aider.
+    </p>
+    <div class="flex justify-center space-x-8 text-4xl">
+        <a href="mailto:traoremohamed032003@gmail.com" class="text-red-500 hover:text-red-600 transition-all duration-300 transform">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="https://wa.me/2250555771407" class="text-green-500 hover:text-green-300 transition-all duration-300 transform">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.facebook.com/mohamedtraore1632003" class="text-blue-500 hover:text-blue-300 transition-all duration-300 transform">
+            <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://tiktok.com/@mohamedtraore9525" class="text-gray-500 hover:text-black-700 transition-all duration-300 transform">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://youtube.com" class="text-red-600 hover:text-red-500 transition-all duration-300 transform">
+            <i class="fab fa-youtube"></i>
+        </a>
+    </div>
+    <div class="mt-8 text-gray-500">
+        
+        <p>Contact du développeur: +225 05-55-77-14-07</p>
+        <p>Son Email: traoremohamed032003@gmail.com</p>
+    </div>
+</section>
+
+    <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fonction pour charger les parties communes (header, footer)
+            async function loadPartials() {
+                try {
+                    const headerResponse = await fetch('header.html');
+                    const headerHtml = await headerResponse.text();
+                    document.getElementById('header-placeholder').innerHTML = headerHtml;
+
+                    const footerResponse = await fetch('footer.html');
+                    const footerHtml = await footerResponse.text();
+                    document.getElementById('footer-placeholder').innerHTML = footerHtml;
+                } catch (error) {
+                    console.error('Erreur lors du chargement des parties communes:', error);
+                }
+            }
+
+            loadPartials().then(() => {
+                // Initialisation de la logique du mode sombre/clair
+                const darkModeToggle = document.getElementById('dark-mode-toggle');
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') {
+                    document.body.classList.add('light-mode');
+                    const icon = document.querySelector('#dark-mode-toggle i');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                }
+                darkModeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                    const icon = document.querySelector('#dark-mode-toggle i');
+                    if (document.body.classList.contains('light-mode')) {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                        localStorage.setItem('theme', 'light');
+                    } else {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                        localStorage.setItem('theme', 'dark');
+                    }
+                });
+
+                // Initialisation de la logique du profil et déconnexion
+                const currentUser = StreamflixDB.getCurrentUser();
+                const profilePicNav = document.getElementById('profile-pic-nav');
+                const navUsername = document.getElementById('nav-username');
+                const profileDropdownToggle = document.getElementById('profile-dropdown-toggle');
+                const profileDropdownContent = document.querySelector('.profile-dropdown-content');
+                const logoutButton = document.getElementById('logout-button');
+
+                if (currentUser) {
+                    profilePicNav.src = currentUser.profile_pic_url || 'images/profiles/default.svg';
+                    navUsername.textContent = currentUser.name;
+if (currentUser.role === 'admin') {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = 'admin.html';
+                        adminLink.id = 'admin-page-link';
+                        adminLink.className = 'block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors';
+                        adminLink.textContent = 'Page Admin';
+                        // Insérer avant le bouton de déconnexion
+                        logoutButton.before(adminLink);
+                    }
+                } else {
+                    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+                    window.location.href = 'login.html';
+                }
+
+                profileDropdownToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    profileDropdownContent.classList.toggle('hidden');
+                });
+                
+                window.addEventListener('click', (e) => {
+                    if (!profileDropdownToggle.contains(e.target) && !profileDropdownContent.contains(e.target)) {
+                        profileDropdownContent.classList.add('hidden');
+                    }
+                });
+
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    StreamflixDB.setCurrentUser(null);
+                    window.location.href = 'login.html';
+                });
+            });
+        });
+    </script>

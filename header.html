@@ -1,0 +1,82 @@
+<header class="fixed top-0 w-full z-50 bg-gradient-to-b from-black to-transparent transition-all duration-300">
+    <div class="flex justify-between items-center px-6 md:px-12 py-4">
+        <div class="flex items-center space-x-10">
+            <a href="index.html" class="text-3xl font-bold text-red-500 hover:text-red-400 transition duration-300">
+                STREAMFLIX
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="nav-link text-gray-300 hover:text-red-500 font-semibold transition-all duration-300" data-page="index.html">
+                    Accueil
+                </a>
+                <a href="films.html" class="nav-link text-gray-300 hover:text-red-500 font-semibold transition-all duration-300" data-page="films.html">
+                    Films
+                </a>
+                <a href="series.html" class="nav-link text-gray-300 hover:text-red-500 font-semibold transition-all duration-300" data-page="series.html">
+                    Séries
+                </a>
+                <a href="my_list.html" class="nav-link text-gray-300 hover:text-red-500 font-semibold transition-all duration-300" data-page="my_list.html">
+                    Ma Liste
+                </a>
+            </nav>
+        </div>
+
+        <div class="flex items-center space-x-6">
+            <!-- Utilisateur connecté -->
+            <div id="userSection" class="hidden md:flex items-center space-x-4">
+                <a href="profile.html" class="text-gray-300 hover:text-red-500 transition-all duration-300 flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                        <span id="userAvatar" class="text-white font-semibold text-sm">U</span>
+                    </div>
+                    <span id="userName" class="text-sm">Utilisateur</span>
+                </a>
+                <a href="logout.html" class="text-gray-300 hover:text-red-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-5 w-5"></i>
+                </a>
+            </div>
+
+            <!-- Bouton connexion -->
+            <div id="loginSection" class="hidden">
+                <a href="login.html" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition duration-300 flex items-center space-x-2">
+                    <i data-lucide="log-in" class="h-4 w-4"></i>
+                    <span>Se connecter</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+// Gestion du header
+document.addEventListener('DOMContentLoaded', function() {
+    updateHeaderAuth();
+    highlightActivePage();
+});
+
+function updateHeaderAuth() {
+    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    const userName = localStorage.getItem('userName') || 'Utilisateur';
+    const userSection = document.getElementById('userSection');
+    const loginSection = document.getElementById('loginSection');
+    const userAvatar = document.getElementById('userAvatar');
+    const userNameElement = document.getElementById('userName');
+
+    if (isLoggedIn) {
+        userSection.classList.remove('hidden');
+        loginSection.classList.add('hidden');
+        userAvatar.textContent = userName.charAt(0).toUpperCase();
+        userNameElement.textContent = userName;
+    } else {
+        userSection.classList.add('hidden');
+        loginSection.classList.remove('hidden');
+    }
+}
+
+function highlightActivePage() {
+    const currentPage = window.location.pathname.split('/').pop();
+    document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.getAttribute('data-page') === currentPage) {
+            link.classList.add('text-red-500', 'border-b-2', 'border-red-500');
+        }
+    });
+}
+</script>

@@ -1,0 +1,34 @@
+
+## Installation
+
+1. **Cloner le projet**
+```bash
+git clone <votre-repo>
+cd streamflix
+
+## 🔗 LIENS ENTRE LES FICHIERS
+
+### **Navigation principale :**
+- **index.html** → Accueil avec aperçu du contenu
+- **films.html** → Catalogue complet des films
+- **series.html** → Catalogue complet des séries  
+- **my_list.html** → Contenu sauvegardé par l'utilisateur
+- **profile.html** → Gestion du compte utilisateur
+- **login.html** → Authentification
+- **logout.html** → Déconnexion
+
+### **Composants partagés :**
+- **header.html** → Navigation globale
+- **footer.html** → Pied de page
+- **modals.html** → Modales réutilisables
+- **js/streamflix.js** → Logique applicative centrale
+
+### **Flux utilisateur :**
+1. **Arrivée** → `index.html`
+2. **Navigation** → Header global
+3. **Authentification** → `login.html` → Redirection vers `index.html`
+4. **Exploration** → `films.html` / `series.html`
+5. **Interaction** → Ajout à `my_list.html`
+6. **Gestion** → `profile.html` pour les paramètres
+
+Cette structure crée une application web complète et cohérente où tous les fichiers sont interconnectés et partagent les mêmes composants et fonctionnalités.

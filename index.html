@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamflix - Accueil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
+        }
+        .poster-hover {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .poster-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full z-50 bg-gradient-to-b from-black to-transparent transition-all duration-300">
+        <div class="flex justify-between items-center px-6 md:px-12 py-4">
+            <div class="flex items-center space-x-10">
+                <h1 class="text-3xl font-bold text-red-500">STREAMFLIX</h1>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-red-500 border-b-2 border-red-500 font-semibold transition-all duration-300">Accueil</a>
+                    <a href="films.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Films</a>
+                    <a href="series.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Séries</a>
+                    <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Ma Liste</a>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
+                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
+                    Utilisateur
+                </a>
+                <a href="login.html" class="text-gray-300 hover:text-red-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-6 w-6"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative h-screen flex items-center">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Bannière Stranger Things" class="w-full h-full object-cover">
+            <div class="absolute inset-0 hero-gradient"></div>
+        </div>
+        
+        <div class="relative z-10 px-6 md:px-12 max-w-4xl">
+            <h1 class="text-5xl md:text-7xl font-black mb-4 text-white">
+                El Monarquia Streamflix-Mt
+            </h1>
+            <div class="flex items-center space-x-4 mb-4">
+                <span class="bg-red-500 px-3 py-1 rounded-full text-sm font-semibold">New</span>
+                <span class="text-lg">2023</span>
+                <span class="border border-gray-400 px-2 py-1 rounded text-sm">TV-14</span>
+                <span class="text-lg">4</span>
+                <div class="flex items-center space-x-1">
+                    <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
+                    <span>4.7</span>
+                </div>
+            </div>
+            <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl">
+Ici visualisez mes contenus de films et séries d'ecception
+            </p>
+            <div class="flex space-x-4">
+                <button onclick="openModal('trailers/video_2025-11-05_15-10-54.mp4', '24 heures chrono')" 
+                        class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-bold text-lg transition-all duration-300 flex items-center space-x-2">
+                    <i data-lucide="play" class="h-6 w-6"></i>
+                    <span>Regarder</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="relative z-20 -mt-32">
+        <!-- Films en tendance -->
+        <section class="px-6 md:px-12 mb-16">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Films en tendance</h2>
+                <a href="films.html" class="text-red-400 hover:text-red-300 transition-all duration-300 flex items-center space-x-2 group">
+                    <span class="font-semibold">voir plus</span>
+                    <i data-lucide="chevron-right" class="h-5 w-5 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+            
+            c<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                <!-- Film 1 - Inception -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/inception.webp" 
+                             alt="Inception" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('inception', 'movies')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>
+                            <span class="bg-purple-500 px-2 py-1 rounded text-xs font-bold">4K</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.8</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">Inception</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2010</span>
+                                    <span>2h28min</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('inception', 'movies')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/inception.mp4', 'Inception')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('inception', 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film 2 - CHANG CAN DUNK -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/changcandunk_poster.jpeg" 
+                             alt="CHANG CAN DUNK" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('CHANG', 'movies')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>
+                            <span class="bg-purple-500 px-2 py-1 rounded text-xs font-bold">4K</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.8</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">CHANG CAN DUNK</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2010</span>
+                                    <span>2h28min</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('CHANG', 'movies')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'CHANG CAN DUNK')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('CHANG', 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film 3 - KATE -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/kate.jpg" 
+                             alt="KATE" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('Kate', 'movies')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.3</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">KATE</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2009</span>
+                                    <span>2h42min</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('Kate', 'movies')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'KATE')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('Kate', 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film 4 - La ferme de la terreur -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/ferme.jpg" 
+                             alt="La ferme de la terreur" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('ferme', 'movies')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.3</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">La ferme de la terreur</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2009</span>
+                                    <span>2h42min</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('ferme', 'movies')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'La ferme de la terreur')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('ferme', 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film 5 - Robocop -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/robocop.webp" 
+                             alt="Robocop" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('Robocop', 'movies')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.3</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">Robocop</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2009</span>
+                                    <span>2h42min</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('Robocop', 'movies')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'Robocop')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('Robocop', 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film 6 - belle étincelle -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/eti.jpg" 
+                             alt="belle étinelle" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('etincelle', 'movies')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-blue-500 px-2 py-1 rounded text-xs font-bold">HD</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.3</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">belle étincelle</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2009</span>
+                                    <span>2h42min</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('etincelle', 'movies')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'belle étincelle')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('etincelle', 'movies')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Séries à ne pas manquer -->
+        <section class="px-6 md:px-12 mb-16">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Séries à ne pas manquer</h2>
+                <a href="series.html" class="text-red-400 hover:text-red-300 transition-all duration-300 flex items-center space-x-2 group">
+                    <span class="font-semibold">Voir plus</span>
+                    <i data-lucide="chevron-right" class="h-5 w-5 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                <!-- Série 1 - Fast and furious -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/fast.jpg" 
+                             alt="Fast and furious" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('fast', 'series')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">Fast and furious</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2016</span>
+                                    <span>4 saisons</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('fast', 'series')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'Fast and furious')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('fast', 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Série 2 - X-men -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/x-me.jpg" 
+                             alt="X-men" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('X-men', 'series')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">X-men</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2016</span>
+                                    <span>4 saisons</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('X-men', 'series')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'X-men')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('X-men', 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Série 3 - Transformers -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/trasform.jpg" 
+                             alt="Transformers" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('Transformers', 'series')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">Transformers</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2016</span>
+                                    <span>4 saisons</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('Transformers', 'series')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'Transformers')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('Transformers', 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Série 4 - Naruto -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/eruto.jpg" 
+                             alt="Naruto" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('Naruto', 'series')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">Naruto</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2016</span>
+                                    <span>4 saisons</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('Naruto', 'series')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'Naruto')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('Naruto', 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Série 5 - Attaque des titans -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/tita.jpg" 
+                             alt="Attaque des titans" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('titans', 'series')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">Attaque des titans</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2016</span>
+                                    <span>4 saisons</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('titans', 'series')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'Attaque des titans')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('titans', 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Série 6 - spy x family -->
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 transition-all duration-300 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="img/spy.jpg" 
+                             alt="spy x family" 
+                             class="w-full h-full object-cover cursor-pointer"
+                             onclick="openContentModal('spyxfamily', 'series')">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            <span class="bg-red-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-3 w-3 text-yellow-400 fill-current"></i>
+                                <span class="text-xs font-semibold">4.7</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">spy x family</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>2016</span>
+                                    <span>4 saisons</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openContentModal('spyxfamily', 'series')" 
+                                            class="bg-red-500 hover:bg-red-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); openModal('assets/videos/trailer.mp4', 'spy x family')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyListQuick('spyxfamily', 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL DÉTAILS CONTENU -->
+    <div id="contentModal" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 p-4 hidden">
+        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalContentTitle" class="text-2xl font-bold text-white">Titre</h3>
+                <button onclick="closeContentModal()" 
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Image -->
+                    <div class="md:col-span-1">
+                        <img id="modalContentImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="md:col-span-2">
+                        <div class="flex flex-wrap items-center gap-4 mb-4">
+                            <span id="modalContentYear" class="text-lg font-semibold text-gray-300"></span>
+                            <span id="modalContentDuration" class="text-lg text-gray-400"></span>
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
+                                <span id="modalContentRating" class="text-lg font-semibold"></span>
+                            </div>
+                            <span id="modalContentAge" class="border border-gray-400 px-2 py-1 rounded text-sm"></span>
+                        </div>
+                        
+                        <div id="modalContentGenres" class="flex flex-wrap gap-2 mb-4"></div>
+                        
+                        <p id="modalContentDescription" class="text-gray-300 mb-6 leading-relaxed"></p>
+                        
+                        <div id="modalContentExtra" class="mb-6"></div>
+                        
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="playTrailerBtn" onclick="playTrailer()" 
+                                    class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="play" class="h-5 w-5"></i>
+                                <span>Voir le trailer</span>
+                            </button>
+                            <button id="addToListBtn" onclick="addToMyList()" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="plus" class="h-5 w-5"></i>
+                                <span>Ajouter à ma liste</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDÉO -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-95 flex justify-center items-center z-50 hidden">
+        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalTitle" class="text-xl font-bold">Lecture en cours</h3>
+                <button onclick="closeModal()" 
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            <video id="videoPlayer" controls class="w-full rounded-b-2xl focus:outline-none">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+     <div id="footer-placeholder"></div>
+    <footer class="bg-gray-800 border-t border-gray-700 py-12">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+           <!-- Le contenu du pied de page (section contact) -->
+<section id="contact" class="py-16 bg-gray-900 rounded-xl shadow-2xl text-center">
+    <h2 class="text-4xl font-extrabold mb-8 text-white">Contactez-nous</h2>
+    <p class="text-gray-400 mb-10 max-w-2xl mx-auto text-lg leading-relaxed">
+        Des questions, des suggestions ou juste envie de dire bonjour ? N'hésitez pas à nous contacter ! Nous sommes là pour vous aider.
+    </p>
+    <div class="flex justify-center space-x-8 text-4xl">
+        <a href="mailto:traoremohamed032003@gmail.com" class="text-red-500 hover:text-red-600 transition-all duration-300 transform">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="https://wa.me/2250555771407" class="text-green-500 hover:text-green-300 transition-all duration-300 transform">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.facebook.com/mohamedtraore1632003" class="text-blue-500 hover:text-blue-300 transition-all duration-300 transform">
+            <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://tiktok.com/@mohamedtraore9525" class="text-gray-500 hover:text-black-700 transition-all duration-300 transform">
+            <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://youtube.com" class="text-red-600 hover:text-red-500 transition-all duration-300 transform">
+            <i class="fab fa-youtube"></i>
+        </a>
+    </div>
+    <div class="mt-8 text-gray-500">
+        
+        <p>Contact du développeur: +225 05-55-77-14-07</p>
+        <p>Son Email: traoremohamed032003@gmail.com</p>
+    </div>
+</section>
+
+
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+        
+        // Variables globales pour le modal
+        let currentContentId = null;
+        let currentContentType = null;
+        let currentVideo = null;
+
+        // Gestion de la modal vidéo
+        function openModal(videoSrc, title) {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            currentVideo = player;
+            
+            if (title) {
+                modalTitle.textContent = title;
+            }
+            
+            player.src = videoSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.add('hidden');
+            if (currentVideo) {
+                currentVideo.pause();
+                currentVideo.src = '';
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gestion du modal de détails
+        function openContentModal(contentId, contentType) {
+            const modal = document.getElementById('contentModal');
+            currentContentId = contentId;
+            currentContentType = contentType;
+            
+            const contentData = getContentData(contentId, contentType);
+            
+            if (contentData) {
+                // Mettre à jour le modal avec les données
+                document.getElementById('modalContentTitle').textContent = contentData.titre;
+                document.getElementById('modalContentImage').src = contentData.image;
+                document.getElementById('modalContentImage').alt = contentData.titre;
+                document.getElementById('modalContentYear').textContent = contentData.annee;
+                document.getElementById('modalContentRating').textContent = contentData.rating;
+                document.getElementById('modalContentAge').textContent = contentData.age;
+                document.getElementById('modalContentDescription').textContent = contentData.description;
+                
+                // Durée ou saisons
+                if (contentType === 'movies') {
+                    document.getElementById('modalContentDuration').textContent = contentData.duree;
+                } else {
+                    document.getElementById('modalContentDuration').textContent = contentData.saisons + ' saisons';
+                }
+                
+                // Genres
+                const genresContainer = document.getElementById('modalContentGenres');
+                genresContainer.innerHTML = '';
+                contentData.genre.forEach(genre => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-gray-700 px-3 py-1 rounded-full text-sm';
+                    span.textContent = genre;
+                    genresContainer.appendChild(span);
+                });
+                
+                // Informations supplémentaires
+                const extraContainer = document.getElementById('modalContentExtra');
+                extraContainer.innerHTML = '';
+                
+                if (contentType === 'movies') {
+                    extraContainer.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong class="text-gray-400">Réalisation:</strong>
+                                <p class="text-gray-300">${contentData.director || 'Non spécifié'}</p>
+                            </div>
+                            <div>
+                                <strong class="text-gray-400">Casting:</strong>
+                                <p class="text-gray-300">${contentData.cast ? contentData.cast.slice(0, 3).join(', ') : 'Non spécifié'}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    extraContainer.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong class="text-gray-400">Création:</strong>
+                                <p class="text-gray-300">${contentData.creators ? contentData.creators.join(', ') : 'Non spécifié'}</p>
+                            </div>
+                            <div>
+                                <strong class="text-gray-400">Casting:</strong>
+                                <p class="text-gray-300">${contentData.cast ? contentData.cast.slice(0, 3).join(', ') : 'Non spécifié'}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Réinitialiser le bouton d'ajout
+                const addButton = document.getElementById('addToListBtn');
+                addButton.disabled = false;
+                addButton.innerHTML = '<i data-lucide="plus" class="h-5 w-5"></i><span>Ajouter à ma liste</span>';
+                addButton.className = 'bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1';
+                
+                // Afficher le modal
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                lucide.createIcons();
+            }
+        }
+
+        function closeContentModal() {
+            const modal = document.getElementById('contentModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentContentId = null;
+            currentContentType = null;
+        }
+
+        // Données de démonstration
+        function getContentData(contentId, contentType) {
+            const contentData = {
+                'movies': {
+                    'inception': {
+                        'titre': 'Inception',
+                        'image': 'img/photo_2025-11-02_09-17-50.jpg',
+                        'video': 'assets/videos/inception.mp4',
+                        'description': 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en s\'infiltrant dans leurs rêves.',
+                        'annee': 2010,
+                        'duree': '2h28min',
+                        'genre': ['Science-Fiction', 'Thriller'],
+                        'rating': 4.8,
+                        'age': 'PG-13',
+                        'director': 'Christopher Nolan',
+                        'cast': ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
+                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves des autres.'
+                    },
+                    'CHANG': {
+                        'titre': 'CHANG CAN DUNK',
+                        'image': 'img/IMG_20250701_073334_067.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en ',
+                        'annee': 2010,
+                        'duree': '2h28min',
+                        'genre': ['Science-Fiction', 'Thriller'],
+                        'rating': 4.8,
+                        'age': 'PG-13',
+                        'director': 'Christopher Nolan',
+                        'cast': ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
+                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves des autres.'
+                    },
+                    'Kate': {
+                        'titre': 'KATE',
+                        'image': 'img/IMG_20250701_073102_452.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    },
+                    'ferme': {
+                        'titre': 'La ferme de la terreur',
+                        'image': 'img/IMG_20250701_073020_406.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    },
+                    'Robocop': {
+                        'titre': 'Robocop',
+                        'image': 'img/IMG_20250701_073336_270.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    },
+                    'etincelle': {
+                        'titre': 'belle étincelle',
+                        'image': 'img/IMG_20250701_072601_810.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    }
+                },
+                'series': {
+                    'fast': {
+                        'titre': 'Fast and furious',
+                        'image': 'img/fast.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Une série mystérieuse et surnaturelle.',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'X-men': {
+                        'titre': 'X-men',
+                        'image': 'img/IMG_20250701_071538_346.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'Transformers': {
+                        'titre': 'Transformers',
+                        'image': 'img/IMG_20250701_071527_232.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'Naruto': {
+                        'titre': 'Naruto',
+                        'image': 'img/Animation_Naruto_SHIPPUDEN_4_3-1200x900.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'titans': {
+                        'titre': 'Attaque des titans',
+                        'image': 'img/tita1.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'spyxfamily': {
+                        'titre': 'spy x family',
+                        'image': 'img/spyxfamily.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    }
+                }
+            };
+            
+            return contentData[contentType]?.[contentId] || null;
+        }
+
+        // Jouer le trailer
+        function playTrailer() {
+            if (currentContentId && currentContentType) {
+                const contentData = getContentData(currentContentId, currentContentType);
+                if (contentData && contentData.video) {
+                    closeContentModal();
+                    openModal(contentData.video, contentData.titre);
+                } else {
+                    alert('Trailer non disponible pour le moment');
+                }
+            }
+        }
+
+        // Ajouter à ma liste
+function addToMyList() {
+    if (!currentContentId || !currentContentType) return;
+    
+    const button = document.getElementById('addToListBtn');
+    button.disabled = true;
+    button.innerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i><span>Ajout en cours...</span>';
+    
+    // Récupérer les données du contenu
+    const contentData = getContentData(currentContentId, currentContentType);
+    
+    if (contentData) {
+        // Préparer les données pour l'ajout
+        const itemData = {
+            'id': Date.now(), // ID unique basé sur le timestamp
+            'title': contentData.titre,
+            'image_url': contentData.image,
+            'year': contentData.annee,
+            'rating': contentData.rating,
+            'genre': contentData.genre[0] || 'Non spécifié',
+            'synopsis': contentData.description,
+            'content_type': currentContentType,
+            'trailer_url': contentData.video
+        };
+        
+        // Simuler l'ajout à la liste
+        setTimeout(() => {
+            // Stocker dans le localStorage
+            const myList = JSON.parse(localStorage.getItem('streamflix_my_list') || '[]');
+            
+            // Vérifier si l'élément existe déjà
+            const exists = myList.some(item => 
+                item.title === itemData.title && item.content_type === itemData.content_type
+            );
+            
+            if (!exists) {
+                itemData.added_at = new Date().toISOString();
+                myList.push(itemData);
+                localStorage.setItem('streamflix_my_list', JSON.stringify(myList));
+                
+                button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i><span>Ajouté !</span>';
+                button.className = 'bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1';
+                showQuickNotification('✓ Ajouté à votre liste !');
+            } else {
+                button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i><span>Déjà dans la liste</span>';
+                button.className = 'bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1';
+                showQuickNotification('ℹ️ Déjà dans votre liste');
+            }
+        }, 1000);
+    }
+    
+    lucide.createIcons();
+}
+
+        // Ajout rapide depuis l'overlay
+function addToMyListQuick(contentId, contentType) {
+    const contentData = getContentData(contentId, contentType);
+    
+    if (contentData) {
+        const itemData = {
+            'id': Date.now(),
+            'title': contentData.titre,
+            'image_url': contentData.image,
+            'year': contentData.annee,
+            'rating': contentData.rating,
+            'genre': contentData.genre[0] || 'Non spécifié',
+            'synopsis': contentData.description,
+            'content_type': contentType,
+            'trailer_url': contentData.video,
+            'added_at': new Date().toISOString()
+        };
+        
+        const myList = JSON.parse(localStorage.getItem('streamflix_my_list') || '[]');
+        const exists = myList.some(item => 
+            item.title === itemData.title && item.content_type === itemData.content_type
+        );
+        
+        if (!exists) {
+            myList.push(itemData);
+            localStorage.setItem('streamflix_my_list', JSON.stringify(myList));
+            showQuickNotification('✓ Ajouté à votre liste !');
+        } else {
+            showQuickNotification('ℹ️ Déjà dans votre liste');
+        }
+    }
+}
+
+        // Notification rapide
+        function showQuickNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fermer les modals avec ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeContentModal();
+                closeModal();
+            }
+        });
+
+        // Clic en dehors des modals pour fermer
+        document.getElementById('contentModal').addEventListener('click', (e) => {
+            if (e.target.id === 'contentModal') {
+                closeContentModal();
+            }
+        });
+
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'videoModal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

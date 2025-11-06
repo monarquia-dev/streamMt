@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séries - Streamflix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/streamflix.js"></script>
+    <style>
+        .series-card {
+            transition: all 0.3s ease;
+        }
+        .series-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+        .poster-hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+     <!-- HEADER -->
+    <header class="fixed top-0 w-full z-50 bg-gradient-to-b from-black to-transparent transition-all duration-300">
+        <div class="flex justify-between items-center px-6 md:px-12 py-4">
+            <div class="flex items-center space-x-10">
+                <h1 class="text-3xl font-bold text-red-500">STREAMFLIX</h1>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Accueil</a>
+                    <a href="films.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Films</a>
+                    <a href="series.html" class="text-red-500 border-b-2 border-red-500 font-semibold transition-all duration-300">Séries</a>
+                    <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Ma Liste</a>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
+                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
+                    Utilisateur
+                </a>
+                <a href="login.html" class="text-gray-300 hover:text-red-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-6 w-6"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+     <!-- Contenu principal -->
+    <main class="container mx-auto px-4 pt-32 pb-20">
+        <!-- En-tête -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-white mb-4 flex items-center justify-center">
+                <i data-lucide="monitor" class="w-12 h-12 text-purple-500 mr-4"></i>
+                Séries
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Plongez dans des univers captivants avec nos séries exclusives et incontournables
+            </p>
+        </div>
+
+        <!-- Barre de recherche et filtres -->
+        <div class="mb-10 bg-gray-900 rounded-2xl p-6 shadow-lg border border-gray-800">
+            <div class="flex flex-col lg:flex-row gap-6 items-end">
+                <!-- Recherche -->
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Rechercher une série</label>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Titre, créateur, acteur..."
+                               class="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 transition duration-300">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                    </div>
+                </div>
+
+                <!-- Filtres -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <!-- Genre -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Genre</label>
+                        <select id="genreFilter" class="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Tous les genres</option>
+                            <option value="science-fiction">Science-Fiction</option>
+                            <option value="drame">Drame</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="action">Action</option>
+                            <option value="comedie">Comédie</option>
+                            <option value="thriller">Thriller</option>
+                            <option value="horreur">Horreur</option>
+                        </select>
+                    </div>
+
+                    <!-- Statut -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Statut</label>
+                        <select id="statusFilter" class="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-purple-500 transition duration-300">
+                            <option value="">Tous les statuts</option>
+                            <option value="en-cours">En cours</option>
+                            <option value="termine">Terminé</option>
+                            <option value="a-venir">À venir</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-2">
+                    <button onclick="applyFilters()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 flex items-center">
+                        <i data-lucide="filter" class="w-5 h-5 mr-2"></i>
+                        Filtrer
+                    </button>
+                    <button onclick="clearFilters()" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 flex items-center">
+                        <i data-lucide="x" class="w-5 h-5 mr-2"></i>
+                        Effacer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Résultats de recherche -->
+            <div id="searchResults" class="mt-4 text-gray-300 hidden">
+                <p id="resultsText"></p>
+            </div>
+        </div>
+
+        <!-- Grille des séries -->
+        <div id="seriesContainer">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                <!-- Les séries seront chargées dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Message vide -->
+        <div id="emptyMessage" class="text-center py-20 bg-gray-900 rounded-xl border border-gray-800 hidden">
+            <i data-lucide="tv" class="w-16 h-16 mx-auto text-purple-600 mb-4"></i>
+            <h3 class="text-2xl font-bold text-gray-300 mb-4">Aucune série trouvée</h3>
+            <p class="text-gray-400 mb-6">Essayez de modifier vos critères de recherche</p>
+            <button onclick="clearFilters()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 inline-flex items-center">
+                <i data-lucide="refresh-cw" class="w-5 h-5 mr-2"></i>
+                Voir toutes les séries
+            </button>
+        </div>
+    </main>
+
+    <!-- MODAL DÉTAILS SÉRIE -->
+    <div id="seriesModal" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 p-4 hidden">
+        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalSeriesTitle" class="text-2xl font-bold text-white">Titre</h3>
+                <button onclick="closeSeriesModal()" 
+                        class="text-gray-400 hover:text-purple-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Image -->
+                    <div class="md:col-span-1">
+                        <img id="modalSeriesImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="md:col-span-2">
+                        <div class="flex flex-wrap items-center gap-4 mb-4">
+                            <span id="modalSeriesYear" class="text-lg font-semibold text-gray-300"></span>
+                            <span id="modalSeriesSeasons" class="text-lg text-gray-400"></span>
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
+                                <span id="modalSeriesRating" class="text-lg font-semibold"></span>
+                            </div>
+                            <span id="modalSeriesStatus" class="border border-gray-400 px-2 py-1 rounded text-sm"></span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white mb-2">Création :</h4>
+                            <p id="modalSeriesCreators" class="text-gray-300"></p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white mb-2">Casting :</h4>
+                            <p id="modalSeriesActors" class="text-gray-300"></p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-white mb-2">Genre :</h4>
+                            <p id="modalSeriesGenre" class="text-gray-300"></p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-white mb-2">Synopsis :</h4>
+                            <p id="modalSeriesSynopsis" class="text-gray-300 leading-relaxed"></p>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="playTrailerBtn" onclick="playSeriesTrailer()" 
+                                    class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="play" class="h-5 w-5"></i>
+                                <span>Voir le trailer</span>
+                            </button>
+                            <button id="addToListBtn" onclick="addSeriesToMyList()" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="plus" class="h-5 w-5"></i>
+                                <span>Ajouter à ma liste</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDÉO -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-95 flex justify-center items-center z-50 hidden">
+        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalTitle" class="text-xl font-bold">Lecture en cours</h3>
+                <button onclick="closeVideoModal()" 
+                        class="text-gray-400 hover:text-purple-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            <video id="videoPlayer" controls class="w-full rounded-b-2xl focus:outline-none">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 py-12">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+            <div class="text-center text-gray-400">
+                <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Données des séries
+        const seriesData = [
+            {
+                id: 1,
+                title: 'The Stranger',
+                image_url: 'img/the-str.jpg',
+                year: 2016,
+                rating: 8.7,
+                genre: 'science-fiction',
+                seasons: 4,
+                status: 'en-cours',
+                creators: 'Les frères Duffer',
+                actors: 'Millie Bobby Brown, Finn Wolfhard, David Harbour',
+                synopsis: 'Quand un jeune garçon disparaît, une petite ville découvre un mystère impliquant des expériences secrètes et des forces surnaturelles.',
+                trailer_url: 'assets/videos/stranger_things.mp4',
+                nouveaute: true
+            },
+            {
+                id: 2,
+                title: 'Breaking Bad',
+                image_url: 'img/185.webp',
+                year: 2008,
+                rating: 9.5,
+                genre: 'drame',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Vince Gilligan',
+                actors: 'Bryan Cranston, Aaron Paul, Anna Gunn',
+                synopsis: 'Un professeur de chimie atteint d\'un cancer se lance dans la fabrication de méthamphétamine pour assurer l\'avenir de sa famille.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                nouveaute: false
+            },
+            {
+                id: 3,
+                title: 'The Witcher',
+                image_url: 'img/the-wither.jpg',
+                year: 2019,
+                rating: 8.2,
+                genre: 'fantasy',
+                seasons: 3,
+                status: 'en-cours',
+                creators: 'Lauren Schmidt Hissrich',
+                actors: 'Henry Cavill, Anya Chalotra, Freya Allan',
+                synopsis: 'Geralt de Riv, un chasseur de monstres mutant, poursuit sa destinée dans un monde tumultueux.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                nouveaute: false
+            },
+            {
+                id: 4,
+                title: 'Prison Break',
+                image_url: 'img/pris.jpg',
+                year: 2011,
+                rating: 9.3,
+                genre: 'drame',
+                seasons: 8,
+                status: 'termine',
+                creators: 'David Benioff, D.B. Weiss',
+                actors: 'Emilia Clarke, Kit Harington, Peter Dinklage',
+                synopsis: 'Neuf familles nobles se disputent le contrôle des terres de Westeros.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                nouveaute: false
+            },
+            {
+                id: 5,
+                title: 'Avengers',
+                image_url: 'img/avengers.jpg',
+                year: 2019,
+                rating: 8.8,
+                genre: 'science-fiction',
+                seasons: 3,
+                status: 'en-cours',
+                creators: 'Jon Favreau',
+                actors: 'Pedro Pascal, Carl Weathers, Gina Carano',
+                synopsis: 'Les aventures d\'un chasseur de primes mandalorien dans la galaxie de Star Wars.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                nouveaute: true
+            },
+            {
+                id: 6,
+                title: 'La casa de papel',
+                image_url: 'img/la-casa-de.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: 'Úrsula Corberó, Álvaro Morte, Itziar Ituño',
+                synopsis: 'Un groupe de criminels fait main basse sur la Maison royale de la Monnaie d\'Espagne.',
+                trailer_url: 'assets/videos/trailer.mp4',
+                nouveaute: false
+            },
+            {
+                id: 7,
+                title: '',
+                image_url: 'img/photo_2023-12-19_22-16-44.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },
+            {
+                id: 8,
+                title: '',
+                image_url: 'img/photo_2020-04-09_20-35-58.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 9,
+                title: '',
+                image_url: 'img/x-me.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 10,
+                title: '',
+                image_url: 'img/eruto.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 11,
+                title: 'Mac-gyver',
+                image_url: 'img/Macgyver.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },
+            {
+                id: 12,
+                title: '',
+                image_url: 'img/mirac.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },
+            {
+                id: 13,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-43-57.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 14,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-47-41.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 15,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-48-43.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 16,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-50-07.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 17,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-53-11.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 18,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-54-37.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 19,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-56-01.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },{
+                id: 20,
+                title: '',
+                image_url: 'img/photo_2025-06-26_14-58-44.jpg',
+                year: 2017,
+                rating: 8.3,
+                genre: 'thriller',
+                seasons: 5,
+                status: 'termine',
+                creators: 'Álex Pina',
+                actors: '',
+                synopsis: '',
+                trailer_url: '',
+                nouveaute: false
+            },
+            
+            
+        ];
+
+        let filteredSeries = [...seriesData];
+        let currentSelectedSeries = null;
+        let currentVideo = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            displaySeries(seriesData);
+            setupEventListeners();
+        });
+
+        // Afficher les séries
+        function displaySeries(series) {
+            const container = document.getElementById('seriesContainer');
+            const emptyMessage = document.getElementById('emptyMessage');
+
+            if (series.length === 0) {
+                container.classList.add('hidden');
+                emptyMessage.classList.remove('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            emptyMessage.classList.add('hidden');
+
+            const grid = container.querySelector('.grid') || container;
+            grid.innerHTML = series.map(serie => `
+                <div class="series-card group relative rounded-xl overflow-hidden bg-gray-800 border border-gray-700 poster-hover">
+                    <div class="aspect-[2/3] relative">
+                        <img src="${serie.image_url}" 
+                             alt="${serie.title}"
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                             onclick="openSeriesModal(${serie.id})"
+                             onerror="this.src='https://placehold.co/400x600/1f2937/9ca3af?text=Image+Indisponible'">
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-col space-y-2">
+                            ${serie.nouveaute ? '<span class="bg-purple-500 px-2 py-1 rounded text-xs font-bold">NOUVEAU</span>' : ''}
+                            <span class="bg-green-500 px-2 py-1 rounded text-xs font-bold">SÉRIE</span>
+                        </div>
+                        
+                        <!-- Rating -->
+                        <div class="absolute top-3 right-3 bg-black bg-opacity-80 px-2 py-1 rounded-lg">
+                            <div class="flex items-center space-x-1 text-yellow-400">
+                                <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                                <span class="text-xs font-semibold">${serie.rating}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Overlay actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="w-full">
+                                <h3 class="font-bold text-white mb-2 text-sm">${serie.title}</h3>
+                                <div class="flex justify-between items-center text-xs text-gray-300 mb-3">
+                                    <span>${serie.year}</span>
+                                    <span>${serie.seasons} saison(s)</span>
+                                </div>
+                                <div class="flex space-x-2 justify-center">
+                                    <button onclick="event.stopPropagation(); openSeriesModal(${serie.id})" 
+                                            class="bg-purple-500 hover:bg-purple-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="info" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); playTrailer('${serie.trailer_url}', '${serie.title}')" 
+                                            class="bg-white hover:bg-gray-200 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="play" class="h-4 w-4 text-black"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); addToMyList(${serie.id}, 'series')" 
+                                            class="bg-green-500 hover:bg-green-600 p-2 rounded-full transition-all duration-300">
+                                        <i data-lucide="plus" class="h-4 w-4 text-white"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // Configurer les écouteurs d'événements
+        function setupEventListeners() {
+            // Recherche en temps réel
+            document.getElementById('searchInput').addEventListener('input', function() {
+                applyFilters();
+            });
+
+            // Filtres automatiques
+            document.getElementById('genreFilter').addEventListener('change', applyFilters);
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        }
+
+        // Appliquer les filtres
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const selectedGenre = document.getElementById('genreFilter').value;
+            const selectedStatus = document.getElementById('statusFilter').value;
+
+            filteredSeries = seriesData.filter(serie => {
+                const genreMatch = !selectedGenre || serie.genre === selectedGenre;
+                const statusMatch = !selectedStatus || serie.status === selectedStatus;
+                const searchMatch = !searchTerm || 
+                    serie.title.toLowerCase().includes(searchTerm) ||
+                    serie.creators.toLowerCase().includes(searchTerm) ||
+                    serie.actors.toLowerCase().includes(searchTerm);
+
+                return genreMatch && statusMatch && searchMatch;
+            });
+
+            displaySeries(filteredSeries);
+            updateSearchResults(searchTerm, selectedGenre, selectedStatus);
+        }
+
+        // Effacer les filtres
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('genreFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            filteredSeries = [...seriesData];
+            displaySeries(filteredSeries);
+            document.getElementById('searchResults').classList.add('hidden');
+        }
+
+        // Mettre à jour les résultats de recherche
+        function updateSearchResults(searchTerm, genre, status) {
+            const resultsElement = document.getElementById('searchResults');
+            const resultsText = document.getElementById('resultsText');
+
+            if (!searchTerm && !genre && !status) {
+                resultsElement.classList.add('hidden');
+                return;
+            }
+
+            let text = `${filteredSeries.length} série(s) trouvée(s)`;
+            if (searchTerm) text += ` pour "${searchTerm}"`;
+            if (genre) text += ` dans ${genre}`;
+            if (status) {
+                const statusText = {
+                    'en-cours': 'en cours',
+                    'termine': 'terminées',
+                    'a-venir': 'à venir'
+                }[status] || status;
+                text += ` ${statusText}`;
+            }
+
+            resultsText.textContent = text;
+            resultsElement.classList.remove('hidden');
+        }
+
+        // Ouvrir le modal des détails de la série
+        function openSeriesModal(seriesId) {
+            const series = seriesData.find(s => s.id === seriesId);
+            if (series) {
+                currentSelectedSeries = series;
+                
+                const modal = document.getElementById('seriesModal');
+                document.getElementById('modalSeriesTitle').textContent = series.title;
+                document.getElementById('modalSeriesImage').src = series.image_url;
+                document.getElementById('modalSeriesImage').alt = series.title;
+                document.getElementById('modalSeriesYear').textContent = series.year;
+                document.getElementById('modalSeriesSeasons').textContent = series.seasons + ' saison(s)';
+                document.getElementById('modalSeriesRating').textContent = series.rating;
+                document.getElementById('modalSeriesStatus').textContent = getStatusText(series.status);
+                document.getElementById('modalSeriesCreators').textContent = series.creators;
+                document.getElementById('modalSeriesActors').textContent = series.actors;
+                document.getElementById('modalSeriesGenre').textContent = series.genre;
+                document.getElementById('modalSeriesSynopsis').textContent = series.synopsis;
+                
+                // Réinitialiser le bouton d'ajout
+                const addButton = document.getElementById('addToListBtn');
+                addButton.disabled = false;
+                addButton.innerHTML = '<i data-lucide="plus" class="h-5 w-5"></i><span>Ajouter à ma liste</span>';
+                addButton.className = 'bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1';
+                
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                lucide.createIcons();
+            }
+        }
+
+        // Obtenir le texte du statut
+        function getStatusText(status) {
+            const statusMap = {
+                'en-cours': 'En cours',
+                'termine': 'Terminé',
+                'a-venir': 'À venir'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Fermer le modal des détails de la série
+        function closeSeriesModal() {
+            const modal = document.getElementById('seriesModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentSelectedSeries = null;
+        }
+
+        // Gestion de la modal vidéo
+        function openVideoModal(videoSrc, title) {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            currentVideo = player;
+            
+            if (title) {
+                modalTitle.textContent = title;
+            }
+            
+            player.src = videoSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.add('hidden');
+            if (currentVideo) {
+                currentVideo.pause();
+                currentVideo.src = '';
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        // Jouer le trailer depuis le modal
+        function playSeriesTrailer() {
+            if (currentSelectedSeries && currentSelectedSeries.trailer_url) {
+                closeSeriesModal();
+                openVideoModal(currentSelectedSeries.trailer_url, currentSelectedSeries.title);
+            } else {
+                alert('Trailer non disponible pour le moment');
+            }
+        }
+
+        // Ajouter la série à ma liste depuis le modal
+        function addSeriesToMyList() {
+            if (!currentSelectedSeries) return;
+            
+            const button = document.getElementById('addToListBtn');
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i><span>Ajout en cours...</span>';
+            
+            // Simuler l'ajout à la liste
+            setTimeout(() => {
+                button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i><span>Ajouté !</span>';
+                button.className = 'bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1';
+                showNotification('✓ Ajouté à votre liste !');
+            }, 1000);
+            
+            lucide.createIcons();
+        }
+
+        // Fonctions globales pour les boutons
+        function playTrailer(trailerUrl, title) {
+            openVideoModal(trailerUrl, title);
+        }
+
+        function addToMyList(contentId, contentType) {
+            // Simulation d'ajout à la liste
+            showNotification('✓ Ajouté à votre liste !');
+        }
+
+        // Afficher une notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fermer les modals avec ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSeriesModal();
+                closeVideoModal();
+            }
+        });
+
+        // Clic en dehors des modals pour fermer
+        document.getElementById('seriesModal').addEventListener('click', (e) => {
+            if (e.target.id === 'seriesModal') {
+                closeSeriesModal();
+            }
+        });
+
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'videoModal') {
+                closeVideoModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modals - Streamflix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #111827;
+            color: white;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-3xl font-bold mb-8 text-center">Modals Streamflix</h1>
+    
+    <!-- Boutons de test -->
+    <div class="flex flex-wrap gap-4 justify-center mb-12">
+        <button onclick="openModal('assets/videos/trailer.mp4', 'Inception')" 
+                class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
+            Ouvrir Modal Vidéo
+        </button>
+        <button onclick="openContentModal('inception', 'movies')" 
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
+            Ouvrir Modal Détails Film
+        </button>
+        <button onclick="openContentModal('fast', 'series')" 
+                class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300">
+            Ouvrir Modal Détails Série
+        </button>
+    </div>
+
+    <!-- MODAL DÉTAILS CONTENU -->
+    <div id="contentModal" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 p-4 hidden">
+        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalContentTitle" class="text-2xl font-bold text-white">Titre</h3>
+                <button onclick="closeContentModal()" 
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div class="p-6 overflow-y-auto max-h-[70vh]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Image -->
+                    <div class="md:col-span-1">
+                        <img id="modalContentImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="md:col-span-2">
+                        <div class="flex flex-wrap items-center gap-4 mb-4">
+                            <span id="modalContentYear" class="text-lg font-semibold text-gray-300"></span>
+                            <span id="modalContentDuration" class="text-lg text-gray-400"></span>
+                            <div class="flex items-center space-x-1">
+                                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
+                                <span id="modalContentRating" class="text-lg font-semibold"></span>
+                            </div>
+                            <span id="modalContentAge" class="border border-gray-400 px-2 py-1 rounded text-sm"></span>
+                        </div>
+                        
+                        <div id="modalContentGenres" class="flex flex-wrap gap-2 mb-4"></div>
+                        
+                        <p id="modalContentDescription" class="text-gray-300 mb-6 leading-relaxed"></p>
+                        
+                        <div id="modalContentExtra" class="mb-6"></div>
+                        
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="playTrailerBtn" onclick="playTrailer()" 
+                                    class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="play" class="h-5 w-5"></i>
+                                <span>Voir le trailer</span>
+                            </button>
+                            <button id="addToListBtn" onclick="addToMyList()" 
+                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
+                                <i data-lucide="plus" class="h-5 w-5"></i>
+                                <span>Ajouter à ma liste</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VIDÉO -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-95 flex justify-center items-center z-50 hidden">
+        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl">
+            <div class="flex justify-between items-center p-6 border-b border-gray-700">
+                <h3 id="modalTitle" class="text-xl font-bold">Lecture en cours</h3>
+                <button onclick="closeModal()" 
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                    <i data-lucide="x" class="h-6 w-6"></i>
+                </button>
+            </div>
+            <video id="videoPlayer" controls class="w-full rounded-b-2xl focus:outline-none">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+        
+        // Variables globales pour le modal
+        let currentContentId = null;
+        let currentContentType = null;
+        let currentVideo = null;
+
+        // Gestion de la modal vidéo
+        function openModal(videoSrc, title) {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            currentVideo = player;
+            
+            if (title) {
+                modalTitle.textContent = title;
+            }
+            
+            player.src = videoSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.add('hidden');
+            if (currentVideo) {
+                currentVideo.pause();
+                currentVideo.src = '';
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gestion du modal de détails
+        function openContentModal(contentId, contentType) {
+            const modal = document.getElementById('contentModal');
+            currentContentId = contentId;
+            currentContentType = contentType;
+            
+            const contentData = getContentData(contentId, contentType);
+            
+            if (contentData) {
+                // Mettre à jour le modal avec les données
+                document.getElementById('modalContentTitle').textContent = contentData.titre;
+                document.getElementById('modalContentImage').src = contentData.image;
+                document.getElementById('modalContentImage').alt = contentData.titre;
+                document.getElementById('modalContentYear').textContent = contentData.annee;
+                document.getElementById('modalContentRating').textContent = contentData.rating;
+                document.getElementById('modalContentAge').textContent = contentData.age;
+                document.getElementById('modalContentDescription').textContent = contentData.description;
+                
+                // Durée ou saisons
+                if (contentType === 'movies') {
+                    document.getElementById('modalContentDuration').textContent = contentData.duree;
+                } else {
+                    document.getElementById('modalContentDuration').textContent = contentData.saisons + ' saisons';
+                }
+                
+                // Genres
+                const genresContainer = document.getElementById('modalContentGenres');
+                genresContainer.innerHTML = '';
+                contentData.genre.forEach(genre => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-gray-700 px-3 py-1 rounded-full text-sm';
+                    span.textContent = genre;
+                    genresContainer.appendChild(span);
+                });
+                
+                // Informations supplémentaires
+                const extraContainer = document.getElementById('modalContentExtra');
+                extraContainer.innerHTML = '';
+                
+                if (contentType === 'movies') {
+                    extraContainer.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong class="text-gray-400">Réalisation:</strong>
+                                <p class="text-gray-300">${contentData.director || 'Non spécifié'}</p>
+                            </div>
+                            <div>
+                                <strong class="text-gray-400">Casting:</strong>
+                                <p class="text-gray-300">${contentData.cast ? contentData.cast.slice(0, 3).join(', ') : 'Non spécifié'}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    extraContainer.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <strong class="text-gray-400">Création:</strong>
+                                <p class="text-gray-300">${contentData.creators ? contentData.creators.join(', ') : 'Non spécifié'}</p>
+                            </div>
+                            <div>
+                                <strong class="text-gray-400">Casting:</strong>
+                                <p class="text-gray-300">${contentData.cast ? contentData.cast.slice(0, 3).join(', ') : 'Non spécifié'}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Réinitialiser le bouton d'ajout
+                const addButton = document.getElementById('addToListBtn');
+                addButton.disabled = false;
+                addButton.innerHTML = '<i data-lucide="plus" class="h-5 w-5"></i><span>Ajouter à ma liste</span>';
+                addButton.className = 'bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1';
+                
+                // Afficher le modal
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                lucide.createIcons();
+            }
+        }
+
+        function closeContentModal() {
+            const modal = document.getElementById('contentModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentContentId = null;
+            currentContentType = null;
+        }
+
+        // Données de démonstration
+        function getContentData(contentId, contentType) {
+            const contentData = {
+                'movies': {
+                    'inception': {
+                        'titre': 'Inception',
+                        'image': 'img/inception.webp',
+                        'video': 'assets/videos/inception.mp4',
+                        'description': 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en s\'infiltrant dans leurs rêves.',
+                        'annee': 2010,
+                        'duree': '2h28min',
+                        'genre': ['Science-Fiction', 'Thriller'],
+                        'rating': 4.8,
+                        'age': 'PG-13',
+                        'director': 'Christopher Nolan',
+                        'cast': ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
+                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves des autres.'
+                    },
+                    'CHANG': {
+                        'titre': 'CHANG CAN DUNK',
+                        'image': 'img/IMG_20250701_073334_067.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en ',
+                        'annee': 2010,
+                        'duree': '2h28min',
+                        'genre': ['Science-Fiction', 'Thriller'],
+                        'rating': 4.8,
+                        'age': 'PG-13',
+                        'director': 'Christopher Nolan',
+                        'cast': ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
+                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves des autres.'
+                    },
+                    'Kate': {
+                        'titre': 'KATE',
+                        'image': 'img/IMG_20250701_073102_452.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    },
+                    'ferme': {
+                        'titre': 'La ferme de la terreur',
+                        'image': 'img/IMG_20250701_073020_406.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    },
+                    'Robocop': {
+                        'titre': 'Robocop',
+                        'image': 'img/IMG_20250701_073336_270.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    },
+                    'etincelle': {
+                        'titre': 'belle étincelle',
+                        'image': 'img/IMG_20250701_072601_810.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2009,
+                        'duree': '2h42min',
+                        'genre': ['Science-Fiction', 'Aventure'],
+                        'rating': 4.3,
+                        'age': 'PG-13',
+                        'director': 'James Cameron',
+                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+                        'synopsis': 'Une aventure épique'
+                    }
+                },
+                'series': {
+                    'fast': {
+                        'titre': 'Fast and furious',
+                        'image': 'img/fast.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Une série mystérieuse et surnaturelle.',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'X-men': {
+                        'titre': 'X-men',
+                        'image': 'img/IMG_20250701_071538_346.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'Transformers': {
+                        'titre': 'Transformers',
+                        'image': 'img/IMG_20250701_071527_232.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'Naruto': {
+                        'titre': 'Naruto',
+                        'image': 'img/Animation_Naruto_SHIPPUDEN_4_3-1200x900.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'titans': {
+                        'titre': 'Attaque des titans',
+                        'image': 'img/tita1.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    },
+                    'spyxfamily': {
+                        'titre': 'spy x family',
+                        'image': 'img/spyxfamily.jpg',
+                        'video': 'assets/videos/trailer.mp4',
+                        'description': 'Description non disponible',
+                        'annee': 2016,
+                        'saisons': 4,
+                        'genre': ['Horreur', 'Science-Fiction'],
+                        'rating': 4.7,
+                        'age': 'TV-14',
+                        'creators': ['Les frères Duffer'],
+                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
+                        'synopsis': 'Une série mystérieuse et surnaturelle.'
+                    }
+                }
+            };
+            
+            return contentData[contentType]?.[contentId] || null;
+        }
+
+        // Jouer le trailer
+        function playTrailer() {
+            if (currentContentId && currentContentType) {
+                const contentData = getContentData(currentContentId, currentContentType);
+                if (contentData && contentData.video) {
+                    closeContentModal();
+                    openModal(contentData.video, contentData.titre);
+                } else {
+                    alert('Trailer non disponible pour le moment');
+                }
+            }
+        }
+
+        // Ajouter à ma liste
+        function addToMyList() {
+            if (!currentContentId || !currentContentType) return;
+            
+            const button = document.getElementById('addToListBtn');
+            button.disabled = true;
+            button.innerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i><span>Ajout en cours...</span>';
+            
+            // Simuler l'ajout à la liste
+            setTimeout(() => {
+                button.innerHTML = '<i data-lucide="check" class="h-5 w-5"></i><span>Ajouté !</span>';
+                button.className = 'bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1';
+                showQuickNotification('✓ Ajouté à votre liste !');
+            }, 1000);
+            
+            lucide.createIcons();
+        }
+
+        // Ajout rapide depuis l'overlay
+        function addToMyListQuick(contentId, contentType) {
+            showQuickNotification('✓ Ajouté à votre liste !');
+        }
+
+        // Notification rapide
+        function showQuickNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fermer les modals avec ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeContentModal();
+                closeModal();
+            }
+        });
+
+        // Clic en dehors des modals pour fermer
+        document.getElementById('contentModal').addEventListener('click', (e) => {
+            if (e.target.id === 'contentModal') {
+                closeContentModal();
+            }
+        });
+
+        document.getElementById('videoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'videoModal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

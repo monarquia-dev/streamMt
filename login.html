@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamflix - Connexion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #e0e7ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            
+            /* Arrière-plan avec Image */
+            background-image: url('img/arrière_pla.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Calque de superposition pour l'obscurité */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: -1;
+            animation: pulse-bg 10s infinite alternate;
+        }
+
+        @keyframes pulse-bg {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .modal-content {
+            background: rgba(18, 18, 48, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(80, 80, 150, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(80, 80, 150, 0.5);
+            width: 100%;
+            max-width: 450px;
+            transform: perspective(1000px) rotateY(0deg);
+            transition: transform 0.5s ease-in-out;
+            animation: slide-in 1s ease-out;
+        }
+
+        .modal-content:hover {
+            transform: perspective(1000px) rotateY(5deg) scale(1.02);
+            box-shadow: 0 0 60px rgba(80, 80, 150, 0.7);
+        }
+
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .streamflix-logo {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #e50914;
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            color: #e0e7ff;
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #3498db;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #e50914 0%, #ff4a5a 100%);
+            box-shadow: 0 5px 20px rgba(229, 9, 20, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #ff4a5a 0%, #e50914 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.6);
+        }
+
+        .link-text {
+            color: #3498db;
+            transition: all 0.3s ease;
+        }
+        .link-text:hover {
+            color: #e0e7ff;
+            text-shadow: 0 0 5px #3498db;
+        }
+
+        .divider {
+            background: rgba(255, 255, 255, 0.1);
+            height: 1px;
+        }
+        
+        .error-message {
+            background-color: rgba(235, 59, 90, 0.2);
+            border-left: 4px solid #e50914;
+        }
+
+        .login-bg {
+            background: linear-gradient(135deg, #0d0c1d 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .form-container {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div class="min-h-screen login-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 form-container p-8 rounded-xl shadow-2xl border border-gray-700 modal-content">
+            <!-- En-tête -->
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-red-500 mb-2 streamflix-logo">STREAMFLIX</h1>
+                <h2 class="text-2xl font-semibold text-white">Connexion à votre compte</h2>
+                <p class="mt-2 text-gray-400">Accédez à votre bibliothèque de films et séries</p>
+            </div>
+
+            <!-- Formulaire -->
+            <form class="mt-8 space-y-6" id="loginForm">
+                <!-- Messages d'erreur -->
+                <div id="errorMessage" class="bg-red-500 text-white p-3 rounded-lg text-center hidden">
+                    <div class="flex items-center justify-center space-x-2">
+                        <i data-lucide="alert-circle" class="h-5 w-5"></i>
+                        <span id="errorText"></span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Champ Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Adresse email</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="mail" class="h-5 w-5 text-gray-400"></i>
+                            </div>
+                            <input 
+                                id="email" 
+                                name="email" 
+                                type="email" 
+                                autocomplete="email" 
+                                required 
+                                class="relative block w-full pl-10 pr-3 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200 input-field"
+                                placeholder="votre@email.com"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Champ Mot de passe -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i data-lucide="lock" class="h-5 w-5 text-gray-400"></i>
+                            </div>
+                            <input 
+                                id="password" 
+                                name="password" 
+                                type="password" 
+                                autocomplete="current-password" 
+                                required 
+                                class="relative block w-full pl-10 pr-3 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition duration-200 input-field"
+                                placeholder="Votre mot de passe"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Options supplémentaires -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input 
+                            id="remember-me" 
+                            name="remember-me" 
+                            type="checkbox" 
+                            class="h-4 w-4 text-red-500 focus:ring-red-500 border-gray-600 rounded bg-gray-700"
+                        >
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-300">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-red-400 hover:text-red-300 transition duration-200 link-text">
+                            Mot de passe oublié?
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bouton de connexion -->
+                <div>
+                    <button 
+                        type="submit" 
+                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200 transform hover:scale-105 btn-primary"
+                    >
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i data-lucide="log-in" class="h-5 w-5 text-red-300"></i>
+                        </span>
+                        Se connecter
+                    </button>
+                </div>
+
+                <!-- Lien d'inscription -->
+                <div class="text-center">
+                    <p class="text-gray-400">
+                        Nouveau sur Streamflix? 
+                        <a href="register.html" class="font-medium text-red-400 hover:text-red-300 transition duration-200 link-text">
+                            Créer un compte
+                        </a>
+                    </p>
+                </div>
+            </form>
+
+            <!-- Informations de démonstration -->
+            <div class="mt-6 p-4 bg-gray-700 rounded-lg border border-gray-600">
+                <p class="text-sm text-gray-300 text-center mb-2">
+                    <strong class="text-red-400">Compte de démonstration:</strong>
+                </p>
+                <div class="text-center space-y-1">
+                    <p class="text-xs text-gray-400">
+                        Email: <code class="bg-gray-800 px-2 py-1 rounded text-red-300">user@streamflix.ci</code>
+                    </p>
+                    <p class="text-xs text-gray-400">
+                        Mot de passe: <code class="bg-gray-800 px-2 py-1 rounded text-red-300">password123</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+        
+        // Gestion du formulaire de connexion
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Réinitialiser les erreurs
+            errorMessage.classList.add('hidden');
+            
+            // Validation
+            if (!email || !password) {
+                showError('Veuillez remplir tous les champs.');
+                return;
+            }
+            
+            // Identifiants de démonstration
+            const validEmail = 'user@streamflix.ci';
+            const validPassword = 'password123';
+            
+            if (email === validEmail && password === validPassword) {
+                // Connexion réussie
+                simulateLogin();
+            } else {
+                showError('Email ou mot de passe incorrect.');
+            }
+        });
+        
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const form = document.getElementById('loginForm');
+            
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+            
+            // Effet de vibration
+            form.classList.add('animate-pulse');
+            setTimeout(() => {
+                form.classList.remove('animate-pulse');
+            }, 1000);
+        }
+        
+        function simulateLogin() {
+            const button = document.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            // Animation de chargement
+            button.innerHTML = `
+                <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <i data-lucide="loader-2" class="h-5 w-5 text-red-300 animate-spin"></i>
+                </span>
+                Connexion en cours...
+            `;
+            button.disabled = true;
+            
+            // Simuler un délai de connexion
+            setTimeout(() => {
+                // Stocker les informations de connexion dans le localStorage
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userEmail', document.getElementById('email').value);
+                localStorage.setItem('userName', 'Utilisateur Streamflix');
+                localStorage.setItem('loginTime', new Date().toISOString());
+                
+                // Redirection vers la page d'accueil
+                window.location.href = 'index.html';
+            }, 1500);
+            
+            lucide.createIcons();
+        }
+        
+        // Animation pour les champs de formulaire
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('ring-2', 'ring-red-500', 'rounded-lg');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('ring-2', 'ring-red-500');
+            });
+        });
+        
+        // Remplissage automatique des identifiants de démo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Vérifier si l'utilisateur est déjà connecté
+            if (localStorage.getItem('userLoggedIn') === 'true') {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Pré-remplir avec les identifiants de démo (optionnel)
+            // document.getElementById('email').value = 'user@streamflix.ci';
+            // document.getElementById('password').value = 'password123';
+            
+            // Focus automatique sur le premier champ
+            document.getElementById('email')?.focus();
+        });
+        
+        // Fonction pour remplir automatiquement les identifiants de démo
+        function fillDemoCredentials() {
+            document.getElementById('email').value = 'user@streamflix.ci';
+            document.getElementById('password').value = 'password123';
+        }
+        
+        // Ajouter un bouton pour remplir automatiquement (optionnel)
+        const demoInfo = document.querySelector('.mt-6.p-4.bg-gray-700');
+        if (demoInfo) {
+            const fillButton = document.createElement('button');
+            fillButton.type = 'button';
+            fillButton.className = 'w-full mt-2 py-2 px-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition duration-200 text-sm';
+            fillButton.innerHTML = '<i data-lucide="zap" class="w-4 h-4 mr-2 inline"></i>Remplir automatiquement';
+            fillButton.onclick = fillDemoCredentials;
+            demoInfo.appendChild(fillButton);
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

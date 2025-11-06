@@ -1,0 +1,17 @@
+{
+  "name": "streamflix",
+  "version": "1.0.0",
+  "description": "Plateforme de streaming HTML/JS",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000",
+    "dev": "live-server --port=3000 --watch=.",
+    "build": "echo 'Build completed'"
+  },
+  "dependencies": {
+    "live-server": "^1.2.2"
+  },
+  "keywords": ["streaming", "movies", "series", "html", "javascript"],
+  "author": "Streamflix Team",
+  "license": "MIT"
+}
