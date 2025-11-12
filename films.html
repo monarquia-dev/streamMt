@@ -37,6 +37,34 @@
                     <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Ma Liste</a>
                 </nav>
             </div>
+            <!-- Menu Hamburger pour Mobile -->
+            <div class="md:hidden">
+                <button id="mobileMenuButton" class="text-gray-300 hover:text-red-500 p-2">
+                    <i data-lucide="menu" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
+                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
+                    <span class="hidden sm:inline">Utilisateur</span>
+                </a>
+                <a href="login.html" class="text-gray-300 hover:text-red-500 transition duration-300">
+                    <i data-lucide="log-out" class="h-6 w-6"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Menu Mobile -->
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-black bg-opacity-95 border-t border-gray-800 hidden">
+            <nav class="flex flex-col p-4 space-y-4">
+                <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-2 px-4 rounded-lg hover:bg-gray-800">Accueil</a>
+                <a href="films.html" class="text-red-500 bg-gray-800 font-semibold transition-all duration-300 py-2 px-4 rounded-lg">Films</a>
+                <a href="series.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-2 px-4 rounded-lg hover:bg-gray-800">Séries</a>
+                <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-2 px-4 rounded-lg hover:bg-gray-800">Ma Liste</a>
+            </nav>
+        </div>
+
             
             <div class="flex items-center space-x-6">
                 <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
@@ -243,7 +271,7 @@
     <footer class="bg-gray-800 border-t border-gray-700 py-12">
         <div class="max-w-7xl mx-auto px-6 md:px-12">
             <div class="text-center text-gray-400">
-                <p>&copy; 2025 El Monarquia Streaming</p>
+                <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
@@ -2280,4 +2308,3 @@
     </script>
 </body>
 </html>
-
