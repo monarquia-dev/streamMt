@@ -18,14 +18,26 @@
         .poster-hover {
             cursor: pointer;
         }
+        .notification {
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
-     <!-- HEADER -->
+   <!-- HEADER -->
     <header class="fixed top-0 w-full z-50 bg-gradient-to-b from-black to-transparent transition-all duration-300">
         <div class="flex justify-between items-center px-6 md:px-12 py-4">
             <div class="flex items-center space-x-10">
                 <h1 class="text-3xl font-bold text-red-500">STREAMFLIX</h1>
+                <!-- Navigation Desktop -->
                 <nav class="hidden md:flex space-x-8">
                     <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Accueil</a>
                     <a href="films.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Films</a>
@@ -34,7 +46,14 @@
                 </nav>
             </div>
             
-            <div class="flex items-center space-x-6">
+            <!-- Menu Hamburger pour Mobile -->
+            <div class="md:hidden">
+                <button id="mobileMenuButton" class="text-gray-300 hover:text-red-500 p-2 transition duration-300">
+                    <i data-lucide="menu" class="h-6 w-6"></i>
+                </button>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-6">
                 <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
                     <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
                     Utilisateur
@@ -43,6 +62,19 @@
                     <i data-lucide="log-out" class="h-6 w-6"></i>
                 </a>
             </div>
+        </div>
+
+        <!-- Menu Mobile -->
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-black bg-opacity-95 border-t border-gray-800 absolute top-16 left-0 w-full hidden">
+            <nav class="flex flex-col p-4 space-y-4">
+               <div class="border-t border-gray-700 pt-4 flex justify-between">
+                   <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Accueil</a>
+                <a href="films.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Films</a>
+                <a href="series.html" class="text-red-500 bg-gray-800 font-semibold transition-all duration-300 py-3 px-4 rounded-lg text-center">Séries</a>
+                <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Ma Liste</a>
+                 
+                </div>
+            </nav>
         </div>
     </header>
      <!-- Contenu principal -->
@@ -229,13 +261,13 @@
     <footer class="bg-gray-800 border-t border-gray-700 py-12">
         <div class="max-w-7xl mx-auto px-6 md:px-12">
             <div class="text-center text-gray-400">
-                <p>&copy; 2025 El Monarquia Streaming</p>
+                <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Données des séries
+        // Données des séries (corrigées et complétées)
         const seriesData = [
             {
                 id: 1,
@@ -249,7 +281,7 @@
                 creators: 'Les frères Duffer',
                 actors: 'Millie Bobby Brown, Finn Wolfhard, David Harbour',
                 synopsis: 'Quand un jeune garçon disparaît, une petite ville découvre un mystère impliquant des expériences secrètes et des forces surnaturelles.',
-                trailer_url: 'assets/videos/stranger_things.mp4',
+                trailer_url: 'trailers/',
                 nouveaute: true
             },
             {
@@ -264,7 +296,7 @@
                 creators: 'Vince Gilligan',
                 actors: 'Bryan Cranston, Aaron Paul, Anna Gunn',
                 synopsis: 'Un professeur de chimie atteint d\'un cancer se lance dans la fabrication de méthamphétamine pour assurer l\'avenir de sa famille.',
-                trailer_url: 'assets/videos/trailer.mp4',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
@@ -279,7 +311,7 @@
                 creators: 'Lauren Schmidt Hissrich',
                 actors: 'Henry Cavill, Anya Chalotra, Freya Allan',
                 synopsis: 'Geralt de Riv, un chasseur de monstres mutant, poursuit sa destinée dans un monde tumultueux.',
-                trailer_url: 'assets/videos/trailer.mp4',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
@@ -291,16 +323,16 @@
                 genre: 'drame',
                 seasons: 8,
                 status: 'termine',
-                creators: 'David Benioff, D.B. Weiss',
-                actors: 'Emilia Clarke, Kit Harington, Peter Dinklage',
-                synopsis: 'Neuf familles nobles se disputent le contrôle des terres de Westeros.',
-                trailer_url: 'assets/videos/trailer.mp4',
+                creators: '',
+                actors: '',
+                synopsis: '',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
                 id: 5,
-                title: 'Avengers',
-                image_url: 'img/avengers.jpg',
+                title: 'Star wars',
+                image_url: 'img/star.jpg',
                 year: 2019,
                 rating: 8.8,
                 genre: 'science-fiction',
@@ -309,7 +341,7 @@
                 creators: 'Jon Favreau',
                 actors: 'Pedro Pascal, Carl Weathers, Gina Carano',
                 synopsis: 'Les aventures d\'un chasseur de primes mandalorien dans la galaxie de Star Wars.',
-                trailer_url: 'assets/videos/trailer.mp4',
+                trailer_url: 'trailers/',
                 nouveaute: true
             },
             {
@@ -324,158 +356,146 @@
                 creators: 'Álex Pina',
                 actors: 'Úrsula Corberó, Álvaro Morte, Itziar Ituño',
                 synopsis: 'Un groupe de criminels fait main basse sur la Maison royale de la Monnaie d\'Espagne.',
-                trailer_url: 'assets/videos/trailer.mp4',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
                 id: 7,
-                title: '',
+                title: 'The Hunger Games',
                 image_url: 'img/photo_2023-12-19_22-16-44.jpg',
-                year: 2017,
-                rating: 8.3,
-                genre: 'thriller',
-                seasons: 5,
+                year: 2012,
+                rating: 7.2,
+                genre: 'science-fiction',
+                seasons: 1,
                 status: 'termine',
-                creators: 'Álex Pina',
-                actors: '',
-                synopsis: '',
-                trailer_url: '',
+                creators: 'Gary Ross',
+                actors: 'Jennifer Lawrence, Josh Hutcherson, Liam Hemsworth',
+                synopsis: 'Dans un futur dystopique, une adolescente se porte volontaire pour participer à un jeu télévisé mortel.',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
                 id: 8,
-                title: '',
+                title: 'Dragon Ball GT',
                 image_url: 'img/photo_2020-04-09_20-35-58.jpg',
                 year: 2017,
-                rating: 8.3,
-                genre: 'thriller',
-                seasons: 5,
+                rating: 8.8,
+                genre: 'science-fiction',
+                seasons: 3,
                 status: 'termine',
-                creators: 'Álex Pina',
+                creators: '',
                 actors: '',
                 synopsis: '',
-                trailer_url: '',
+                trailer_url: 'trailers/',
                 nouveaute: false
-            },{
+            },
+            {
                 id: 9,
-                title: '',
+                title: 'X-Men',
                 image_url: 'img/x-me.jpg',
-                year: 2017,
-                rating: 8.3,
-                genre: 'thriller',
-                seasons: 5,
+                year: 2011,
+                rating: 7.4,
+                genre: 'action',
+                seasons: 2,
                 status: 'termine',
-                creators: 'Álex Pina',
-                actors: '',
-                synopsis: '',
-                trailer_url: '',
+                creators: 'Bryan Singer',
+                actors: 'James McAvoy, Michael Fassbender, Jennifer Lawrence',
+                synopsis: 'Les mutants dotés de pouvoirs spéciaux luttent pour leur survie dans un monde qui les craint.',
+                trailer_url: 'assets/videos/trailer.mp4',
                 nouveaute: false
-            },{
+            },
+            {
                 id: 10,
-                title: '',
-                image_url: 'img/eruto.jpg',
-                year: 2017,
-                rating: 8.3,
-                genre: 'thriller',
-                seasons: 5,
+                title: 'Attack on Titan',
+                image_url: 'img/tita.jpg',
+                year: 2013,
+                rating: 9.0,
+                genre: 'action',
+                seasons: 4,
                 status: 'termine',
-                creators: 'Álex Pina',
-                actors: '',
-                synopsis: '',
-                trailer_url: '',
+                creators: 'Hajime Isayama',
+                actors: 'Yuki Kaji, Yui Ishikawa, Marina Inoue',
+                synopsis: 'L\'humanité vit retranchée derrière d\'immenses murs pour se protéger des Titans géants.',
+                trailer_url: 'trailers/L_Attaque_des_Titans_🎬_Saison_01_🎬_Bande_Annonce_VF480p.mp4',
                 nouveaute: false
-            },{
+            },
+            {
                 id: 11,
-                title: 'Mac-gyver',
+                title: 'MacGyver',
                 image_url: 'img/Macgyver.jpg',
-                year: 2017,
-                rating: 8.3,
-                genre: 'thriller',
+                year: 2016,
+                rating: 6.2,
+                genre: 'action',
                 seasons: 5,
                 status: 'termine',
-                creators: 'Álex Pina',
-                actors: '',
-                synopsis: '',
-                trailer_url: '',
+                creators: 'Peter M. Lenkov',
+                actors: 'Lucas Till, Tristin Mays, George Eads',
+                synopsis: 'Un jeune agent secret utilise son génie pour résoudre des problèmes complexes avec des objets du quotidien.',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
                 id: 12,
-                title: '',
+                title: 'Miraculous',
                 image_url: 'img/mirac.jpg',
-                year: 2017,
-                rating: 8.3,
-                genre: 'thriller',
+                year: 2015,
+                rating: 7.5,
+                genre: 'fantasy',
                 seasons: 5,
-                status: 'termine',
-                creators: 'Álex Pina',
-                actors: '',
-                synopsis: '',
-                trailer_url: '',
+                status: 'en-cours',
+                creators: 'Thomas Astruc',
+                actors: 'Cristina Vee, Bryce Papenbrook, Keith Silverstein',
+                synopsis: 'Deux adolescents parisiens se transforment en super-héros pour protéger la ville des super-vilains.',
+                trailer_url: 'trailers/',
                 nouveaute: false
             },
             {
-                id: 16,
+                id: 13,
                 title: '24 Heures chrono',
                 image_url: 'img/photo_2025-06-11_11-12-05.jpg',
                 year: 2001,
-                rating: 4.3,
+                rating: 8.4,
                 genre: 'action',
                 seasons: 9,
                 status: 'termine',
                 creators: 'Joel Surnow et Robert Cochran',
                 actors: 'Kiefer Sutherland, Mary Lynn Rajskub, Carlos Bernard, Dennis Haysbert',
-                synopsis: 'Cette série raconte les aventures de Jack bauer ( kiefer Sutherland ) un agent de la cellule antiterroriste de los angeles qui lutte contre des actes de terrorisme sur le territoire américain',
+                synopsis: 'Cette série raconte les aventures de Jack Bauer, un agent de la cellule antiterroriste de Los Angeles qui lutte contre des actes de terrorisme sur le territoire américain.',
                 trailer_url: 'trailers/24h_chrono_saison_1_bande_annonce_(360p).mp4',
                 nouveaute: false
             },
             {
-                id: 22,
-                title: 'x-men le commencement',
+                id: 14,
+                title: 'X-Men: Le Commencement',
                 image_url: 'img/x.jpg',
-                year: 2001,
-                rating: 4.3,
+                year: 2011,
+                rating: 7.4,
                 genre: 'action',
-                seasons: 9,
+                seasons: 1,
                 status: 'termine',
-                creators: 'Joel Surnow et Robert Cochran',
-                actors: 'Kiefer Sutherland, Mary Lynn Rajskub, Carlos Bernard, Dennis Haysbert',
-                synopsis: 'Cette série raconte les aventures de Jack bauer ( kiefer Sutherland ) un agent de la cellule antiterroriste de los angeles qui lutte contre des actes de terrorisme sur le territoire américain',
+                creators: 'Matthew Vaughn',
+                actors: 'James McAvoy, Michael Fassbender, Jennifer Lawrence',
+                synopsis: 'Les origines des mutants et la formation des X-Men pour sauver le monde d\'une guerre nucléaire.',
                 trailer_url: 'trailers/X-MEN_Le_Commencement_VF_Bande-Annonce(480p).mp4',
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 15,
                 title: 'Dragon Ball Z',
                 image_url: 'img/dz.jpg',
-                year: 2001,
-                rating: 4.3,
+                year: 1989,
+                rating: 8.8,
                 genre: 'action',
                 seasons: 9,
                 status: 'termine',
-                creators: '',
-                actors: '',
-                synopsis: '',
-                trailer_url: 'trailers/',
+                creators: 'Akira Toriyama',
+                actors: 'Masako Nozawa, Ryo Horikawa, Hiromi Tsuru',
+                synopsis: 'Les aventures de Son Goku et ses amis qui défendent la Terre contre des ennemis de plus en plus puissants.',
+                trailer_url: 'assets/videos/trailer.mp4',
                 nouveaute: false
             },
             {
-                id: 24,
-                title: 'the Hunger games',
-                image_url: 'img/photo_2023-12-19_22-16-44.jpg',
-                year: 2001,
-                rating: 4.3,
-                genre: 'action',
-                seasons: 9,
-                status: 'termine',
-                creators: '',
-                actors: '',
-                synopsis: '',
-                trailer_url: 'trailers/',
-                nouveaute: false
-            },
-            {
-                id: 25,
+                id: 16,
                 title: '',
                 image_url: 'img/photo_2025-05-21_15-34-44.jpg',
                 year: 2001,
@@ -490,7 +510,7 @@
                 nouveaute: false
             },
             {
-                id: 26,
+                id: 17,
                 title: '',
                 image_url: 'img/photo_2025-06-26_15-39-08.jpg',
                 year: 2001,
@@ -505,7 +525,7 @@
                 nouveaute: false
             },
             {
-                id: 27,
+                id: 18,
                 title: '',
                 image_url: 'img/photo_2025-09-09_09-16-39.jpg',
                 year: 2001,
@@ -520,7 +540,7 @@
                 nouveaute: false
             },
             {
-                id: 28,
+                id: 19,
                 title: '',
                 image_url: 'img/photo_2025-09-09_10-05-27.jpg',
                 year: 2001,
@@ -535,7 +555,7 @@
                 nouveaute: false
             },
             {
-                id: 29,
+                id: 20,
                 title: '',
                 image_url: 'img/photo_2025-09-09_21-29-07.jpg',
                 year: 2001,
@@ -550,7 +570,7 @@
                 nouveaute: false
             },
             {
-                id: 30,
+                id: 21,
                 title: '',
                 image_url: 'img/photo_2025-10-04_10-37-02.jpg',
                 year: 2001,
@@ -565,24 +585,9 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 22,
                 title: '',
                 image_url: 'img/spy.jpg',
-                year: 2001,
-                rating: 4.3,
-                genre: 'action',
-                seasons: 9,
-                status: 'termine',
-                creators: '',
-                actors: '',
-                synopsis: '',
-                trailer_url: 'trailers/',
-                nouveaute: false
-            },
-            {
-                id: 23,
-                title: '',
-                image_url: 'img/tita.jpg',
                 year: 2001,
                 rating: 4.3,
                 genre: 'action',
@@ -610,7 +615,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 24,
                 title: '',
                 image_url: 'img/68c743cb28119.jpg',
                 year: 2001,
@@ -625,7 +630,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 25,
                 title: '',
                 image_url: 'img/IMG_20250619_114317_764.jpg',
                 year: 2001,
@@ -640,7 +645,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 26,
                 title: '',
                 image_url: 'img/IMG_20250623_061217_771.jpg',
                 year: 2001,
@@ -655,7 +660,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 27,
                 title: '',
                 image_url: 'img/IMG_20250623_152133_865.jpg',
                 year: 2001,
@@ -670,7 +675,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 28,
                 title: '',
                 image_url: 'img/IMG_20250623_172449_550.jpg',
                 year: 2001,
@@ -685,7 +690,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 29,
                 title: '',
                 image_url: 'img/ieleve.jpg',
                 year: 2001,
@@ -700,7 +705,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 30,
                 title: '',
                 image_url: 'img/IMG_20250623_053718_400.jpg',
                 year: 2001,
@@ -715,7 +720,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 31,
                 title: '',
                 image_url: 'img/ho.jpg',
                 year: 2001,
@@ -730,7 +735,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 32,
                 title: '',
                 image_url: 'img/detm.jpg',
                 year: 2001,
@@ -745,7 +750,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 33,
                 title: '',
                 image_url: 'img/IMG_20250624_070511_186.jpg',
                 year: 2001,
@@ -760,7 +765,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 34,
                 title: '',
                 image_url: 'img/IMG_20250621_162800_169.jpg',
                 year: 2001,
@@ -775,7 +780,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 35,
                 title: '',
                 image_url: 'img/evasio.jpg',
                 year: 2001,
@@ -790,7 +795,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 36,
                 title: '',
                 image_url: 'img/girl.jpg',
                 year: 2001,
@@ -805,7 +810,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 37,
                 title: '',
                 image_url: 'img/dadju.jpg',
                 year: 2001,
@@ -820,7 +825,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 38,
                 title: '',
                 image_url: 'img/paddi.jpg',
                 year: 2001,
@@ -835,7 +840,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 39,
                 title: '',
                 image_url: 'img/issa.jpg',
                 year: 2001,
@@ -850,7 +855,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 40,
                 title: '',
                 image_url: 'img/reach.jpg',
                 year: 2001,
@@ -865,7 +870,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 41,
                 title: '',
                 image_url: 'img/redrod.jpg',
                 year: 2001,
@@ -880,7 +885,7 @@
                 nouveaute: false
             },
             {
-                id: 23,
+                id: 42,
                 title: '',
                 image_url: 'img/vigil.jpg',
                 year: 2001,
@@ -895,7 +900,7 @@
                 nouveaute: false
             },
             {
-                id: 24,
+                id: 43,
                 title: '',
                 image_url: 'img/star.jpg',
                 year: 2001,
@@ -921,7 +926,25 @@
             lucide.createIcons();
             displaySeries(seriesData);
             setupEventListeners();
+            setupMobileMenu();
         });
+
+        // Configuration du menu mobile
+        function setupMobileMenu() {
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Fermer le menu en cliquant à l'extérieur
+            document.addEventListener('click', function(event) {
+                if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
 
         // Afficher les séries
         function displaySeries(series) {
@@ -1015,8 +1038,8 @@
                 const statusMatch = !selectedStatus || serie.status === selectedStatus;
                 const searchMatch = !searchTerm || 
                     serie.title.toLowerCase().includes(searchTerm) ||
-                    serie.creators.toLowerCase().includes(searchTerm) ||
-                    serie.actors.toLowerCase().includes(searchTerm);
+                    (serie.creators && serie.creators.toLowerCase().includes(searchTerm)) ||
+                    (serie.actors && serie.actors.toLowerCase().includes(searchTerm));
 
                 return genreMatch && statusMatch && searchMatch;
             });
@@ -1075,10 +1098,20 @@
                 document.getElementById('modalSeriesSeasons').textContent = series.seasons + ' saison(s)';
                 document.getElementById('modalSeriesRating').textContent = series.rating;
                 document.getElementById('modalSeriesStatus').textContent = getStatusText(series.status);
-                document.getElementById('modalSeriesCreators').textContent = series.creators;
-                document.getElementById('modalSeriesActors').textContent = series.actors;
+                document.getElementById('modalSeriesCreators').textContent = series.creators || 'Information non disponible';
+                document.getElementById('modalSeriesActors').textContent = series.actors || 'Information non disponible';
                 document.getElementById('modalSeriesGenre').textContent = series.genre;
-                document.getElementById('modalSeriesSynopsis').textContent = series.synopsis;
+                document.getElementById('modalSeriesSynopsis').textContent = series.synopsis || 'Synopsis non disponible';
+                
+                // Gérer le bouton de trailer
+                const playButton = document.getElementById('playTrailerBtn');
+                if (series.trailer_url) {
+                    playButton.disabled = false;
+                    playButton.className = 'bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1';
+                } else {
+                    playButton.disabled = true;
+                    playButton.className = 'bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1 cursor-not-allowed';
+                }
                 
                 // Réinitialiser le bouton d'ajout
                 const addButton = document.getElementById('addToListBtn');
@@ -1126,6 +1159,11 @@
             player.src = videoSrc;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            
+            // Lecture automatique
+            player.play().catch(e => {
+                console.log('Lecture automatique bloquée:', e);
+            });
         }
         
         function closeVideoModal() {
@@ -1144,7 +1182,7 @@
                 closeSeriesModal();
                 openVideoModal(currentSelectedSeries.trailer_url, currentSelectedSeries.title);
             } else {
-                alert('Trailer non disponible pour le moment');
+                showNotification('Trailer non disponible pour le moment');
             }
         }
 
@@ -1168,7 +1206,11 @@
 
         // Fonctions globales pour les boutons
         function playTrailer(trailerUrl, title) {
-            openVideoModal(trailerUrl, title);
+            if (trailerUrl) {
+                openVideoModal(trailerUrl, title);
+            } else {
+                showNotification('Trailer non disponible pour le moment');
+            }
         }
 
         function addToMyList(contentId, contentType) {
@@ -1179,12 +1221,14 @@
         // Afficher une notification
         function showNotification(message) {
             const notification = document.createElement('div');
-            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50 notification';
             notification.textContent = message;
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.remove();
+                if (notification.parentNode) {
+                    notification.remove();
+                }
             }, 3000);
         }
 
@@ -1211,4 +1255,3 @@
     </script>
 </body>
 </html>
-
