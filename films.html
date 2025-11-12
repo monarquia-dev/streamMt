@@ -29,6 +29,17 @@
         .mobile-menu.open {
             transform: translateY(0);
         }
+        .notification {
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
@@ -65,7 +76,7 @@
         </div>
 
         <!-- Menu Mobile -->
-        <div id="mobileMenu" class="mobile-menu md:hidden bg-black bg-opacity-95 border-t border-gray-800 absolute top-16 left-0 w-full">
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-black bg-opacity-95 border-t border-gray-800 absolute top-16 left-0 w-full hidden">
             <nav class="flex flex-col p-4 space-y-4">
                <div class="border-t border-gray-700 pt-4 flex justify-between">
                    <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Accueil</a>
@@ -286,6 +297,7 @@
             const menuIcon = menuButton.querySelector('i');
             
             if (!isMobileMenuOpen) {
+                mobileMenu.classList.remove('hidden');
                 mobileMenu.classList.add('open');
                 menuIcon.setAttribute('data-lucide', 'x');
                 isMobileMenuOpen = true;
@@ -324,7 +336,6 @@
                 isMobileMenuOpen = false;
             }
         });
-
         // Données des films
         const moviesData = [
             {
@@ -1864,8 +1875,7 @@
                 nouveaute: false
             }
         ];
-
-        let filteredMovies = [...moviesData];
+let filteredMovies = [...moviesData];
         let currentSelectedMovie = null;
         let currentVideo = null;
 
@@ -1974,8 +1984,8 @@
                 const genreMatch = !selectedGenre || movie.genre === selectedGenre;
                 const searchMatch = !searchTerm || 
                     movie.title.toLowerCase().includes(searchTerm) ||
-                    movie.director.toLowerCase().includes(searchTerm) ||
-                    movie.actors.toLowerCase().includes(searchTerm);
+                    (movie.director && movie.director.toLowerCase().includes(searchTerm)) ||
+                    (movie.actors && movie.actors.toLowerCase().includes(searchTerm));
                 
                 // Filtre par année
                 let yearMatch = true;
@@ -2038,9 +2048,19 @@
                 document.getElementById('modalMovieDuration').textContent = movie.duration;
                 document.getElementById('modalMovieRating').textContent = movie.rating;
                 document.getElementById('modalMovieGenre').textContent = movie.genre;
-                document.getElementById('modalMovieDirector').textContent = movie.director;
-                document.getElementById('modalMovieActors').textContent = movie.actors;
-                document.getElementById('modalMovieSynopsis').textContent = movie.synopsis;
+                document.getElementById('modalMovieDirector').textContent = movie.director || 'Information non disponible';
+                document.getElementById('modalMovieActors').textContent = movie.actors || 'Information non disponible';
+                document.getElementById('modalMovieSynopsis').textContent = movie.synopsis || 'Synopsis non disponible';
+                
+                // Gérer le bouton de trailer
+                const playButton = document.getElementById('playTrailerBtn');
+                if (movie.trailer_url) {
+                    playButton.disabled = false;
+                    playButton.className = 'bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1';
+                } else {
+                    playButton.disabled = true;
+                    playButton.className = 'bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 flex-1 cursor-not-allowed';
+                }
                 
                 // Réinitialiser le bouton d'ajout
                 const addButton = document.getElementById('addToListBtn');
@@ -2078,6 +2098,11 @@
             player.src = videoSrc;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            
+            // Lecture automatique
+            player.play().catch(e => {
+                console.log('Lecture automatique bloquée:', e);
+            });
         }
         
         function closeVideoModal() {
@@ -2096,7 +2121,7 @@
                 closeMovieModal();
                 openVideoModal(currentSelectedMovie.trailer_url, currentSelectedMovie.title);
             } else {
-                alert('Trailer non disponible pour le moment');
+                showNotification('Trailer non disponible pour le moment');
             }
         }
 
@@ -2120,7 +2145,11 @@
 
         // Fonctions globales pour les boutons
         function playTrailer(trailerUrl, title) {
-            openVideoModal(trailerUrl, title);
+            if (trailerUrl) {
+                openVideoModal(trailerUrl, title);
+            } else {
+                showNotification('Trailer non disponible pour le moment');
+            }
         }
 
         function addToMyList(contentId, contentType) {
@@ -2131,12 +2160,14 @@
         // Afficher une notification
         function showNotification(message) {
             const notification = document.createElement('div');
-            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            notification.className = 'fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50 notification';
             notification.textContent = message;
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.remove();
+                if (notification.parentNode) {
+                    notification.remove();
+                }
             }, 3000);
         }
 
