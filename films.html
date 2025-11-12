@@ -22,6 +22,13 @@
         .poster-hover {
             cursor: pointer;
         }
+        .mobile-menu {
+            transition: all 0.3s ease-in-out;
+            transform: translateY(-100%);
+        }
+        .mobile-menu.open {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
@@ -30,6 +37,7 @@
         <div class="flex justify-between items-center px-6 md:px-12 py-4">
             <div class="flex items-center space-x-10">
                 <h1 class="text-3xl font-bold text-red-500">STREAMFLIX</h1>
+                <!-- Navigation Desktop -->
                 <nav class="hidden md:flex space-x-8">
                     <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Accueil</a>
                     <a href="films.html" class="text-red-500 border-b-2 border-red-500 font-semibold transition-all duration-300">Films</a>
@@ -37,36 +45,15 @@
                     <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300">Ma Liste</a>
                 </nav>
             </div>
+            
             <!-- Menu Hamburger pour Mobile -->
             <div class="md:hidden">
-                <button id="mobileMenuButton" class="text-gray-300 hover:text-red-500 p-2">
+                <button id="mobileMenuButton" class="text-gray-300 hover:text-red-500 p-2 transition duration-300">
                     <i data-lucide="menu" class="h-6 w-6"></i>
                 </button>
             </div>
             
-            <div class="flex items-center space-x-6">
-                <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
-                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
-                    <span class="hidden sm:inline">Utilisateur</span>
-                </a>
-                <a href="login.html" class="text-gray-300 hover:text-red-500 transition duration-300">
-                    <i data-lucide="log-out" class="h-6 w-6"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Menu Mobile -->
-        <div id="mobileMenu" class="mobile-menu md:hidden bg-black bg-opacity-95 border-t border-gray-800 hidden">
-            <nav class="flex flex-col p-4 space-y-4">
-                <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-2 px-4 rounded-lg hover:bg-gray-800">Accueil</a>
-                <a href="films.html" class="text-red-500 bg-gray-800 font-semibold transition-all duration-300 py-2 px-4 rounded-lg">Films</a>
-                <a href="series.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-2 px-4 rounded-lg hover:bg-gray-800">Séries</a>
-                <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-2 px-4 rounded-lg hover:bg-gray-800">Ma Liste</a>
-            </nav>
-        </div>
-
-            
-            <div class="flex items-center space-x-6">
+            <div class="hidden md:flex items-center space-x-6">
                 <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
                     <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
                     Utilisateur
@@ -75,6 +62,26 @@
                     <i data-lucide="log-out" class="h-6 w-6"></i>
                 </a>
             </div>
+        </div>
+
+        <!-- Menu Mobile -->
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-black bg-opacity-95 border-t border-gray-800 absolute top-16 left-0 w-full">
+            <nav class="flex flex-col p-4 space-y-4">
+                <a href="index.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Accueil</a>
+                <a href="films.html" class="text-red-500 bg-gray-800 font-semibold transition-all duration-300 py-3 px-4 rounded-lg text-center">Films</a>
+                <a href="series.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Séries</a>
+                <a href="my_list.html" class="text-gray-300 hover:text-red-500 font-semibold transition-all duration-300 py-3 px-4 rounded-lg hover:bg-gray-800 text-center">Ma Liste</a>
+                <div class="border-t border-gray-700 pt-4 flex justify-between">
+                    <a href="profile.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
+                        <i data-lucide="user" class="h-5 w-5 mr-2"></i> 
+                        Profil
+                    </a>
+                    <a href="login.html" class="text-gray-300 hover:text-red-500 transition duration-300 flex items-center">
+                        <i data-lucide="log-out" class="h-5 w-5 mr-2"></i>
+                        Déconnexion
+                    </a>
+                </div>
+            </nav>
         </div>
     </header>
 
@@ -277,6 +284,54 @@
     </footer>
 
     <script>
+        // Gestion du menu mobile
+        let isMobileMenuOpen = false;
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = document.getElementById('mobileMenuButton');
+            const menuIcon = menuButton.querySelector('i');
+            
+            if (!isMobileMenuOpen) {
+                mobileMenu.classList.add('open');
+                menuIcon.setAttribute('data-lucide', 'x');
+                isMobileMenuOpen = true;
+            } else {
+                mobileMenu.classList.remove('open');
+                menuIcon.setAttribute('data-lucide', 'menu');
+                isMobileMenuOpen = false;
+            }
+            lucide.createIcons();
+        }
+
+        // Fermer le menu mobile en cliquant à l'extérieur
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = document.getElementById('mobileMenuButton');
+            
+            if (isMobileMenuOpen && !mobileMenu.contains(event.target) && !menuButton.contains(event.target)) {
+                mobileMenu.classList.remove('open');
+                const menuIcon = menuButton.querySelector('i');
+                menuIcon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+                isMobileMenuOpen = false;
+            }
+        });
+
+        // Fermer le menu mobile en redimensionnant la fenêtre
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768 && isMobileMenuOpen) {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const menuButton = document.getElementById('mobileMenuButton');
+                const menuIcon = menuButton.querySelector('i');
+                
+                mobileMenu.classList.remove('open');
+                menuIcon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+                isMobileMenuOpen = false;
+            }
+        });
+
         // Données des films
         const moviesData = [
             {
@@ -554,7 +609,7 @@
                 duration: '1h40min',
                 director: 'Yimou Zhang',
                 actors: 'Matt Damon, Jǐng Tián, Pedro Pascal ',
-                synopsis: 'Entre le courage et l\'effroi, l\'humanité et la monstruosité, il existe une frontière qui ne doit en aucun cas céder. William Garin, un mercenaire emprisonné dans les geôles de la Grande Muraille de Chine, découvre la fonction secrète de la plus colossale des merveilles du monde. L’édifice tremble sous les attaques incessantes de créatures monstrueuses, dont l\'acharnement n\'a d\'égal que leur soif d\'anéantir l\'espèce humaine dans sa totalité.',
+                synopsis: 'Entre le courage et l\'effroi, l\'humanité et la monstruosité, il existe une frontière qui ne doit en aucun cas céder. William Garin, un mercenaire emprisonné dans les geôles de la Grande Muraille de Chine, découvre la fonction secrète de la plus colossale des merveilles du monde. L\'édifice tremble sous les attaques incessantes de créatures monstrueuses, dont l\'acharnement n\'a d\'égal que leur soif d\'anéantir l\'espèce humaine dans sa totalité.',
                 trailer_url: 'trailers/La_Grande_Muraille_Bande_Annonce_Officielle_VF_Au_cinéma_le_11_janvier.mp4',
                 hd: true,
                 ultra_hd: true,
@@ -634,7 +689,7 @@
                 duration: '3h01min',
                 director: ': Shana Feste',
                 actors: 'Alex Pettyfer, Gabriella Wilde, Bruce Greenwood',
-                synopsis: 'Un Amour sans fin est un film réalisé par Shana Feste avec Alex Pettyfer, Gabriella Wilde. Synopsis : L’histoire d’un coup de foudre entre une fille de la haute société, Jade Butterfield, et un garçon charismatique, David Elliot.',
+                synopsis: 'Un Amour sans fin est un film réalisé par Shana Feste avec Alex Pettyfer, Gabriella Wilde. Synopsis : L\'histoire d\'un coup de foudre entre une fille de la haute société, Jade Butterfield, et un garçon charismatique, David Elliot.',
                 trailer_url: 'trailers/Un_Amour_Sans_Fin_Bande_annonce_officielle_VF_Au_cinéma_le_11_juin720p.mp4',
                 hd: true,
                 ultra_hd: true,
@@ -1333,7 +1388,6 @@
                 title: 'Venom 4',
                 image_url: 'img/lastve.jpg',    
                 year: 2019,
-                year: 2019,
                 rating: 8.4,
                 genre: 'action',
                 duration: '1h01min',
@@ -1378,7 +1432,7 @@
                 nouveaute: false
             },
             {
-                id: 68,
+                id: 70,
                 title: '',
                 image_url: 'img/fa.jpg',
                 year: 2019,
@@ -1394,7 +1448,7 @@
                 nouveaute: false
             },
             {
-                id: 69,
+                id: 71,
                 title: '',
                 image_url: 'img/foat.jpg',
                 year: 2019,
@@ -1410,7 +1464,7 @@
                 nouveaute: false
             },
             {
-                id: 70,
+                id: 72,
                 title: '',
                 image_url: 'img/shi1.jpg',
                 year: 2019,
@@ -1426,7 +1480,7 @@
                 nouveaute: false
             },
             {
-                id: 71,
+                id: 73,
                 title: '',
                 image_url: 'img/shi2.jpg',
                 year: 2019,
@@ -1442,7 +1496,7 @@
                 nouveaute: false
             },
             {
-                id: 72,
+                id: 74,
                 title: '',
                 image_url: 'img/shi3.jpg',
                 year: 2019,
@@ -1458,7 +1512,7 @@
                 nouveaute: false
             },
             {
-                id: 73,
+                id: 75,
                 title: '',
                 image_url: 'img/re1.jpg',
                 year: 2019,
@@ -1474,7 +1528,7 @@
                 nouveaute: false
             },
             {
-                id: 74,
+                id: 76,
                 title: '',
                 image_url: 'img/re2.webp',
                 year: 2019,
@@ -1490,7 +1544,7 @@
                 nouveaute: false
             },
             {
-                id: 75,
+                id: 77,
                 title: '',
                 image_url: 'img/sile1.jpg',
                 year: 2019,
@@ -1506,7 +1560,7 @@
                 nouveaute: false
             },
             {
-                id: 76,
+                id: 78,
                 title: '',
                 image_url: 'img/sile2.jpg',
                 year: 2019,
@@ -1522,7 +1576,7 @@
                 nouveaute: false
             },
             {
-                id: 77,
+                id: 79,
                 title: '',
                 image_url: 'img/poursuit.jpg',
                 year: 2019,
@@ -1538,7 +1592,7 @@
                 nouveaute: false
             },
             {
-                id: 78,
+                id: 80,
                 title: 'Flood',
                 image_url: 'img/flood.jpg',
                 year: 2019,
@@ -1553,7 +1607,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 79,
+                id: 81,
                 title: '',
                 image_url: 'img/22miles.jpg',
                 year: 2019,
@@ -1568,7 +1622,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 80,
+                id: 82,
                 title: '',
                 image_url: 'img/ileg.jpg',
                 year: 2019,
@@ -1583,7 +1637,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 81,
+                id: 83,
                 title: '',
                 image_url: 'img/avatar2.jpg',
                 year: 2019,
@@ -1598,7 +1652,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 82,
+                id: 84,
                 title: '',
                 image_url: 'img/spi.jpg',
                 year: 2019,
@@ -1613,7 +1667,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 83,
+                id: 85,
                 title: '',
                 image_url: 'img/tomorow.jpg',
                 year: 2019,
@@ -1628,7 +1682,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 84,
+                id: 86,
                 title: '',
                 image_url: 'img/merce.jpg',
                 year: 2019,
@@ -1643,7 +1697,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 85,
+                id: 87,
                 title: '',
                 image_url: 'img/raid.jpg',
                 year: 2019,
@@ -1658,7 +1712,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 86,
+                id: 88,
                 title: '',
                 image_url: 'img/ouli.jpg',
                 year: 2019,
@@ -1673,7 +1727,7 @@
                 ultra_hd: true,
                 nouveaute: false
             },{
-                id: 87,
+                id: 89,
                 title: '',
                 image_url: 'img/guard.jpg',
                 year: 2019,
@@ -1689,7 +1743,7 @@
                 nouveaute: false
             },
             {
-                id: 88,
+                id: 90,
                 title: '',
                 image_url: 'img/gostrider1.jpg',
                 year: 2019,
@@ -1705,7 +1759,7 @@
                 nouveaute: false
             },
             {
-                id: 89,
+                id: 91,
                 title: '',
                 image_url: 'img/gostrider2.jpg',
                 year: 2019,
@@ -1721,7 +1775,7 @@
                 nouveaute: false
             },
             {
-                id: 90,
+                id: 92,
                 title: '',
                 image_url: 'img/ja.jpg',
                 year: 2019,
@@ -1737,7 +1791,7 @@
                 nouveaute: false
             },
             {
-                id: 91,
+                id: 93,
                 title: '',
                 image_url: 'img/ja2.jpg',
                 year: 2019,
@@ -1753,7 +1807,7 @@
                 nouveaute: false
             },
             {
-                id: 92,
+                id: 94,
                 title: '',
                 image_url: 'img/icce2.jpg',
                 year: 2019,
@@ -1769,7 +1823,7 @@
                 nouveaute: false
             },
             {
-                id: 93,
+                id: 95,
                 title: '',
                 image_url: 'img/assa.jpg',
                 year: 2019,
@@ -1785,7 +1839,7 @@
                 nouveaute: false
             },
             {
-                id: 94,
+                id: 96,
                 title: '',
                 image_url: 'img/guardoftime.jpg',
                 year: 2019,
@@ -1801,7 +1855,7 @@
                 nouveaute: false
             },
             {
-                id: 95,
+                id: 97,
                 title: '',
                 image_url: 'img/saf.jpg',
                 year: 2019,
@@ -1815,7 +1869,7 @@
                 hd: true,
                 ultra_hd: true,
                 nouveaute: false
-            },
+            }
         ];
 
         let filteredMovies = [...moviesData];
@@ -1827,6 +1881,9 @@
             lucide.createIcons();
             displayMovies(moviesData);
             setupEventListeners();
+            
+            // Ajouter l'écouteur d'événement pour le menu mobile
+            document.getElementById('mobileMenuButton').addEventListener('click', toggleMobileMenu);
         });
 
         // Afficher les films
@@ -1901,201 +1958,6 @@
 
             lucide.createIcons();
         }
-         
-        // Données de démonstration
-        function getContentData(contentId, contentType) {
-            const contentData = {
-                'movies': {
-                    'Insaisissables': {
-                        'titre': 'Insaisissables',
-                        'image': 'img/icce.jpg',
-                        'video': 'trailers/INSAISISSABLES_3_Bande_Annonce_VF__2025_(480p).mp4',
-                        'description': 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en s\'infiltrant dans leurs rêves.',
-                        'annee': 2010,
-                        'duree': '2h28min',
-                        'genre': ['Science-Fiction', 'Thriller'],
-                        'rating': 4.8,
-                        'age': 'PG-13',
-                        'director': 'Christopher Nolan',
-                        'cast': ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
-                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves des autres.'
-                    },
-                    'CHANG': {
-                        'titre': 'CHANG CAN DUNK',
-                        'image': 'img/changcandunk_poster.jpeg',
-                        'video': 'trailers/Le_pari_de_Chang_Bande_annonce_officielle_VF_Disney_360p.mp4',
-                        'description': 'Dom Cobb est un voleur expérimenté qui dérobe les secrets les plus précieux de ses cibles en ',
-                        'annee': 2010,
-                        'duree': '2h28min',
-                        'genre': ['Science-Fiction', 'Thriller'],
-                        'rating': 4.8,
-                        'age': 'PG-13',
-                        'director': 'Christopher Nolan',
-                        'cast': ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
-                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves des autres.'
-                    },
-                    'Kate': {
-                        'titre': 'KATE',
-                        'image': 'img/kate.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2009,
-                        'duree': '2h42min',
-                        'genre': ['Science-Fiction', 'Aventure'],
-                        'rating': 4.3,
-                        'age': 'PG-13',
-                        'director': 'James Cameron',
-                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
-                        'synopsis': 'Une aventure épique'
-                    },
-                    'ferme': {
-                        'titre': 'La ferme de la terreur',
-                        'image': 'img/ferme.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2009,
-                        'duree': '2h42min',
-                        'genre': ['Science-Fiction', 'Aventure'],
-                        'rating': 4.3,
-                        'age': 'PG-13',
-                        'director': 'James Cameron',
-                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
-                        'synopsis': 'Une aventure épique'
-                    },
-                    'Robocop': {
-                        'titre': 'Robocop',
-                        'image': 'img/robocop.webp',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2009,
-                        'duree': '2h42min',
-                        'genre': ['Science-Fiction', 'Aventure'],
-                        'rating': 4.3,
-                        'age': 'PG-13',
-                        'director': 'James Cameron',
-                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
-                        'synopsis': 'Une aventure épique'
-                    },
-                    'etincelle': {
-                        'titre': 'belle étincelle',
-                        'image': 'img/eti.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2009,
-                        'duree': '2h42min',
-                        'genre': ['Science-Fiction', 'Aventure'],
-                        'rating': 4.3,
-                        'age': 'PG-13',
-                        'director': 'James Cameron',
-                        'cast': ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
-                        'synopsis': 'Une aventure épique'
-                    }
-                },
-                'series': {
-                    'fast': {
-                        'titre': 'Fast and furious',
-                        'image': 'img/fast.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Une série mystérieuse et surnaturelle.',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les frères Duffer'],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                    'X-men': {
-                        'titre': 'X-men',
-                        'image': 'img/x-me.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les frères Duffer'],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                    'Transformers': {
-                        'titre': 'Transformers',
-                        'image': 'img/trasform.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les frères Duffer'],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                    'Naruto': {
-                        'titre': 'Naruto',
-                        'image': 'img/eruto.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les frères Duffer'],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                    'titans': {
-                        'titre': 'Attaque des titans',
-                        'image': 'img/tita.jpg',
-                        'video': 'assets/videos/trailer.mp4',
-                        'description': 'Description non disponible',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les frères Duffer'],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                    'spyxfamily': {
-                        'titre': 'spy x family',
-                        'image': 'img/spy.jpg',
-                        'video': '',
-                        'description': 'Description non disponible',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les frères Duffer'],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard', 'David Harbour'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                    's': {
-                        'titre': '',
-                        'image': 'img/.jpg',
-                        'video': 'trailers/',
-                        'description': 'Description non disponible',
-                        'annee': 2016,
-                        'saisons': 4,
-                        'genre': ['Horreur', 'Science-Fiction'],
-                        'rating': 4.7,
-                        'age': 'TV-14',
-                        'creators': ['Les '],
-                        'cast': ['Millie Bobby Brown', 'Finn Wolfhard'],
-                        'synopsis': 'Une série mystérieuse et surnaturelle.'
-                    },
-                }
-            };
-            
-            return contentData[contentType]?.[contentId] || null;
-        }
-
 
         // Configurer les écouteurs d'événements
         function setupEventListeners() {
@@ -2290,6 +2152,9 @@
             if (e.key === 'Escape') {
                 closeMovieModal();
                 closeVideoModal();
+                if (isMobileMenuOpen) {
+                    toggleMobileMenu();
+                }
             }
         });
 
