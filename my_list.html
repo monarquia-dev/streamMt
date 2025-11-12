@@ -27,6 +27,31 @@
         .animate-fade-in {
             animation: fade-in 0.3s ease-out;
         }
+        .light-mode {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .light-mode .bg-gray-950 {
+            background-color: #f9fafb;
+        }
+        .light-mode .bg-gray-900 {
+            background-color: #e5e7eb;
+        }
+        .light-mode .text-gray-100 {
+            color: #1f2937;
+        }
+        .light-mode .text-gray-300 {
+            color: #4b5563;
+        }
+        .light-mode .border-gray-700 {
+            border-color: #d1d5db;
+        }
+        .light-mode .bg-gray-800 {
+            background-color: #f3f4f6;
+        }
+        .light-mode .border-gray-800 {
+            border-color: #d1d5db;
+        }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
@@ -52,23 +77,63 @@
                 </a>
             </nav>
             <div class="flex items-center space-x-6">
-                <a href="profile.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
-                    <i data-lucide="user" class="h-6 w-6 mr-1"></i> 
-                    Utilisateur
-                </a>
-                <a href="login.html" class="text-gray-300 hover:text-green-500 transition duration-300">
-                    <i data-lucide="log-out" class="h-6 w-6"></i>
-                </a>
+                <button id="dark-mode-toggle" class="text-gray-300 hover:text-green-500 transition duration-300">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <div class="relative">
+                    <button id="profile-dropdown-toggle" class="flex items-center space-x-2 text-gray-300 hover:text-green-500 transition duration-300">
+                        <img id="profile-pic-nav" src="images/profiles/default.svg" alt="Profil" class="w-8 h-8 rounded-full">
+                        <span id="nav-username">Utilisateur</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div class="profile-dropdown-content hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-1 z-50 border border-gray-700">
+                        <a href="profile.html" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors">
+                            <i data-lucide="user" class="w-4 h-4 inline mr-2"></i> Mon Profil
+                        </a>
+                        <a href="login.html" id="logout-button" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors">
+                            <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i> Déconnexion
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- CONTENU PRINCIPAL -->
     <main class="container mx-auto px-4 pt-32 pb-20">
-        <h2 class="text-5xl font-extrabold text-white mb-8 flex items-center">
-            <i data-lucide="bookmark" class="w-12 h-12 text-green-500 mr-4"></i>
-            Ma Liste
-        </h2>
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
+            <h2 class="text-5xl font-extrabold text-white mb-4 md:mb-0 flex items-center">
+                <i data-lucide="bookmark" class="w-12 h-12 text-green-500 mr-4"></i>
+                Ma Liste
+            </h2>
+            
+            <!-- Contrôles de tri et filtre -->
+            <div class="flex flex-wrap gap-4">
+                <div class="relative">
+                    <select id="sortSelect" class="bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-10">
+                        <option value="added">Date d'ajout</option>
+                        <option value="title">Titre</option>
+                        <option value="year">Année</option>
+                        <option value="rating">Note</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none"></i>
+                </div>
+                
+                <div class="relative">
+                    <select id="filterSelect" class="bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-10">
+                        <option value="all">Tous</option>
+                        <option value="movies">Films</option>
+                        <option value="series">Séries</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none"></i>
+                </div>
+                
+                <button id="clearFilters" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+                    <i data-lucide="filter-x" class="w-4 h-4 mr-2"></i>
+                    Effacer
+                </button>
+            </div>
+        </div>
 
         <div id="myListContent">
             <!-- Le contenu de la liste sera chargé dynamiquement -->
@@ -108,7 +173,7 @@
             <div class="p-6 overflow-y-auto max-h-[70vh]">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-1">
-                        <img id="modalItemImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg">
+                        <img id="modalItemImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/400x600/1e293b/9ca3af?text=Image+Indisponible';">
                     </div>
                     
                     <div class="md:col-span-2">
@@ -166,7 +231,7 @@
     <!-- FOOTER -->
     <footer class="bg-gray-900 border-t border-green-900/30 py-8">
         <div class="container mx-auto px-4 text-center text-gray-500">
-            <p>&copy; 2025 El Monarquia Streaming</p>
+            <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
             <p class="mt-2 text-sm">Votre plateforme de streaming préférée</p>
         </div>
     </footer>
@@ -183,11 +248,90 @@
 
         let currentSelectedItem = null;
         let currentVideo = null;
+        let currentSort = 'added';
+        let currentFilter = 'all';
 
         // Charger la liste au démarrage
         document.addEventListener('DOMContentLoaded', function() {
             loadMyListFromStorage();
+            setupEventListeners();
+            setupThemeToggle();
         });
+
+        // Configuration des écouteurs d'événements
+        function setupEventListeners() {
+            // Tri et filtrage
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                currentSort = this.value;
+                loadMyList();
+            });
+            
+            document.getElementById('filterSelect').addEventListener('change', function() {
+                currentFilter = this.value;
+                loadMyList();
+            });
+            
+            document.getElementById('clearFilters').addEventListener('click', function() {
+                document.getElementById('sortSelect').value = 'added';
+                document.getElementById('filterSelect').value = 'all';
+                currentSort = 'added';
+                currentFilter = 'all';
+                loadMyList();
+            });
+            
+            // Gestion du profil
+            const profileDropdownToggle = document.getElementById('profile-dropdown-toggle');
+            const profileDropdownContent = document.querySelector('.profile-dropdown-content');
+            const logoutButton = document.getElementById('logout-button');
+
+            if (profileDropdownToggle) {
+                profileDropdownToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    profileDropdownContent.classList.toggle('hidden');
+                });
+                
+                window.addEventListener('click', (e) => {
+                    if (!profileDropdownToggle.contains(e.target) && !profileDropdownContent.contains(e.target)) {
+                        profileDropdownContent.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Logique de déconnexion
+                    window.location.href = 'login.html';
+                });
+            }
+        }
+
+        // Configuration du bouton de thème
+        function setupThemeToggle() {
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                const icon = darkModeToggle.querySelector('i');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+            
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                const icon = darkModeToggle.querySelector('i');
+                if (document.body.classList.contains('light-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
 
         // Charger la liste depuis le stockage local
         function loadMyListFromStorage() {
@@ -208,6 +352,18 @@
                         'content_type': 'movies',
                         'trailer_url': 'assets/videos/inception.mp4',
                         'added_at': '2024-01-15 10:30:00'
+                    },
+                    {
+                        'id': 2,
+                        'title': 'Stranger Things',
+                        'image_url': 'img/stranger-things.jpg',
+                        'year': 2016,
+                        'rating': 8.7,
+                        'genre': 'Science-Fiction, Horreur',
+                        'synopsis': 'Des événements étranges se produisent dans une petite ville.',
+                        'content_type': 'series',
+                        'trailer_url': 'assets/videos/stranger-things.mp4',
+                        'added_at': '2024-01-10 14:20:00'
                     }
                 ];
                 saveMyListToStorage();
@@ -218,6 +374,33 @@
         // Sauvegarder la liste dans le stockage local
         function saveMyListToStorage() {
             localStorage.setItem(MY_LIST_STORAGE_KEY, JSON.stringify(myListData));
+        }
+
+        // Trier et filtrer les données
+        function getSortedAndFilteredData() {
+            let filteredData = myListData;
+            
+            // Appliquer le filtre
+            if (currentFilter !== 'all') {
+                filteredData = filteredData.filter(item => item.content_type === currentFilter);
+            }
+            
+            // Appliquer le tri
+            filteredData.sort((a, b) => {
+                switch(currentSort) {
+                    case 'title':
+                        return a.title.localeCompare(b.title);
+                    case 'year':
+                        return b.year - a.year;
+                    case 'rating':
+                        return b.rating - a.rating;
+                    case 'added':
+                    default:
+                        return new Date(b.added_at) - new Date(a.added_at);
+                }
+            });
+            
+            return filteredData;
         }
 
         // Charger et afficher la liste
@@ -231,7 +414,9 @@
                 oldCounter.remove();
             }
 
-            if (myListData.length === 0) {
+            const filteredData = getSortedAndFilteredData();
+            
+            if (filteredData.length === 0) {
                 myListContent.innerHTML = '';
                 emptyListMessage.classList.remove('hidden');
                 return;
@@ -242,13 +427,13 @@
             // Ajouter le compteur
             const countDiv = document.createElement('div');
             countDiv.className = 'list-counter mb-6 text-gray-300 text-lg';
-            countDiv.innerHTML = `<p>Vous avez ${myListData.length} élément(s) dans votre liste</p>`;
+            countDiv.innerHTML = `<p>Vous avez ${filteredData.length} élément(s) dans votre liste</p>`;
             myListContent.parentNode.insertBefore(countDiv, myListContent);
 
             // Afficher les éléments
             myListContent.innerHTML = `
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                    ${myListData.map(item => `
+                    ${filteredData.map(item => `
                         <div class="content-card group relative rounded-xl overflow-hidden bg-gray-800 border border-gray-700 cursor-pointer aspect-[2/3]"
                              onclick="showItemDetails(${JSON.stringify(item).replace(/"/g, '&quot;')})">
                             <div class="relative w-full h-full">
@@ -458,92 +643,5 @@
             }
         });
     </script>
-       <script src="data.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fonction pour charger les parties communes (header, footer)
-            async function loadPartials() {
-                try {
-                    const headerResponse = await fetch('header.html');
-                    const headerHtml = await headerResponse.text();
-                    document.getElementById('header-placeholder').innerHTML = headerHtml;
-
-                    const footerResponse = await fetch('footer.html');
-                    const footerHtml = await footerResponse.text();
-                    document.getElementById('footer-placeholder').innerHTML = footerHtml;
-                } catch (error) {
-                    console.error('Erreur lors du chargement des parties communes:', error);
-                }
-            }
-
-            loadPartials().then(() => {
-                // Initialisation de la logique du mode sombre/clair
-                const darkModeToggle = document.getElementById('dark-mode-toggle');
-                const savedTheme = localStorage.getItem('theme');
-                if (savedTheme === 'light') {
-                    document.body.classList.add('light-mode');
-                    const icon = document.querySelector('#dark-mode-toggle i');
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                }
-                darkModeToggle.addEventListener('click', () => {
-                    document.body.classList.toggle('light-mode');
-                    const icon = document.querySelector('#dark-mode-toggle i');
-                    if (document.body.classList.contains('light-mode')) {
-                        icon.classList.remove('fa-moon');
-                        icon.classList.add('fa-sun');
-                        localStorage.setItem('theme', 'light');
-                    } else {
-                        icon.classList.remove('fa-sun');
-                        icon.classList.add('fa-moon');
-                        localStorage.setItem('theme', 'dark');
-                    }
-                });
-
-                // Initialisation de la logique du profil et déconnexion
-                const currentUser = StreamflixDB.getCurrentUser();
-                const profilePicNav = document.getElementById('profile-pic-nav');
-                const navUsername = document.getElementById('nav-username');
-                const profileDropdownToggle = document.getElementById('profile-dropdown-toggle');
-                const profileDropdownContent = document.querySelector('.profile-dropdown-content');
-                const logoutButton = document.getElementById('logout-button');
-
-                if (currentUser) {
-                    profilePicNav.src = currentUser.profile_pic_url || 'images/profiles/default.svg';
-                    navUsername.textContent = currentUser.name;
-if (currentUser.role === 'admin') {
-                        const adminLink = document.createElement('a');
-                        adminLink.href = 'admin.html';
-                        adminLink.id = 'admin-page-link';
-                        adminLink.className = 'block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors';
-                        adminLink.textContent = 'Page Admin';
-                        // Insérer avant le bouton de déconnexion
-                        logoutButton.before(adminLink);
-                    }
-                } else {
-                    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
-                    window.location.href = 'login.html';
-                }
-
-                profileDropdownToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    profileDropdownContent.classList.toggle('hidden');
-                });
-                
-                window.addEventListener('click', (e) => {
-                    if (!profileDropdownToggle.contains(e.target) && !profileDropdownContent.contains(e.target)) {
-                        profileDropdownContent.classList.add('hidden');
-                    }
-                });
-
-                logoutButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    StreamflixDB.setCurrentUser(null);
-                    window.location.href = 'login.html';
-                });
-            });
-        });
-    </script>
 </body>
-
 </html>
