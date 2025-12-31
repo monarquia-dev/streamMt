@@ -8,49 +8,179 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-green: #10b981;
+            --primary-dark: #030712;
+            --primary-light: #f3f4f6;
+        }
+        
         body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #030712; 
-            color: #f3f4f6; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background-color: var(--primary-dark); 
+            color: var(--primary-light);
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
+        
         .content-card { 
-            transition: all 0.3s ease; 
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        box-shadow 0.3s ease,
+                        opacity 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
+        
         .content-card:hover { 
-            transform: translateY(-6px); 
-            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.3); 
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.25);
         }
+        
+        .content-card:active {
+            transform: translateY(-4px) scale(1.01);
+        }
+        
         @keyframes fade-in {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        @keyframes slide-in {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
         .animate-fade-in {
-            animation: fade-in 0.3s ease-out;
+            animation: fade-in 0.5s ease-out forwards;
         }
+        
+        .animate-slide-in {
+            animation: slide-in 0.3s ease-out forwards;
+        }
+        
         .light-mode {
-            background-color: #f3f4f6;
-            color: #1f2937;
+            background-color: #f8fafc;
+            color: #1e293b;
         }
+        
         .light-mode .bg-gray-950 {
-            background-color: #f9fafb;
+            background-color: #ffffff;
         }
+        
         .light-mode .bg-gray-900 {
-            background-color: #e5e7eb;
+            background-color: #f1f5f9;
         }
+        
         .light-mode .text-gray-100 {
-            color: #1f2937;
+            color: #1e293b;
         }
+        
         .light-mode .text-gray-300 {
-            color: #4b5563;
+            color: #475569;
         }
+        
         .light-mode .border-gray-700 {
-            border-color: #d1d5db;
+            border-color: #cbd5e1;
         }
+        
         .light-mode .bg-gray-800 {
-            background-color: #f3f4f6;
+            background-color: #f8fafc;
         }
+        
         .light-mode .border-gray-800 {
-            border-color: #d1d5db;
+            border-color: #e2e8f0;
+        }
+        
+        .light-mode .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        
+        .light-mode ::-webkit-scrollbar-track {
+            background: #e5e7eb;
+        }
+        
+        .light-mode ::-webkit-scrollbar-thumb {
+            background: #9ca3af;
+        }
+        
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #374151;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            margin-bottom: 5px;
+            z-index: 1000;
+        }
+        
+        /* Progress bar pour les séries */
+        .progress-bar {
+            height: 4px;
+            background: #374151;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-green);
+            transition: width 0.3s ease;
+        }
+        
+        /* Animation pour les notifications */
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .notification {
+            animation: slide-up 0.3s ease-out;
         }
     </style>
 </head>
@@ -58,40 +188,73 @@
     <!-- HEADER -->
     <header class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm p-4 shadow-xl border-b border-green-900/30">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <i data-lucide="film" class="h-8 w-8 text-green-600"></i>
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <i data-lucide="film" class="h-8 w-8 text-green-600 group-hover:scale-110 transition-transform duration-300"></i>
                 <h1 class="text-3xl font-extrabold text-white tracking-wider">Streamflix</h1>
-            </div>
+            </a>
+            
+            <!-- Menu mobile -->
+            <button id="mobile-menu-toggle" class="md:hidden text-gray-300 hover:text-green-500">
+                <i data-lucide="menu" class="h-6 w-6"></i>
+            </button>
+            
+            <nav id="mobile-menu" class="hidden absolute top-full left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-b border-green-900/30 md:hidden">
+                <div class="container mx-auto px-4 py-4">
+                    <a href="index.html" class="block py-2 text-gray-300 hover:text-green-500 transition">
+                        <i data-lucide="home" class="w-5 h-5 inline mr-2"></i> Accueil
+                    </a>
+                    <a href="films.html" class="block py-2 text-gray-300 hover:text-green-500 transition">
+                        <i data-lucide="clapperboard" class="w-5 h-5 inline mr-2"></i> Films
+                    </a>
+                    <a href="series.html" class="block py-2 text-gray-300 hover:text-green-500 transition">
+                        <i data-lucide="monitor" class="w-5 h-5 inline mr-2"></i> Séries
+                    </a>
+                    <a href="my_list.html" class="block py-2 text-green-500 border-l-2 border-green-500 pl-2 transition">
+                        <i data-lucide="list" class="w-5 h-5 inline mr-2"></i> Ma Liste
+                    </a>
+                </div>
+            </nav>
+            
             <nav class="hidden md:flex space-x-8 text-lg font-semibold">
-                <a href="index.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
-                    <i data-lucide="home" class="w-5 h-5 mr-1"></i> Accueil
+                <a href="index.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center group">
+                    <i data-lucide="home" class="w-5 h-5 mr-1 group-hover:scale-110 transition-transform"></i> Accueil
                 </a>
-                <a href="films.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
-                    <i data-lucide="clapperboard" class="w-5 h-5 mr-1"></i> Films
+                <a href="films.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center group">
+                    <i data-lucide="clapperboard" class="w-5 h-5 mr-1 group-hover:scale-110 transition-transform"></i> Films
                 </a>
-                <a href="series.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center">
-                    <i data-lucide="monitor" class="w-5 h-5 mr-1"></i> Séries
+                <a href="series.html" class="text-gray-300 hover:text-green-500 transition duration-300 flex items-center group">
+                    <i data-lucide="monitor" class="w-5 h-5 mr-1 group-hover:scale-110 transition-transform"></i> Séries
                 </a>
-                <a href="my_list.html" class="text-green-500 border-b-2 border-green-500 transition duration-300 flex items-center">
-                    <i data-lucide="list" class="w-5 h-5 mr-1"></i> Ma Liste
+                <a href="my_list.html" class="text-green-500 border-b-2 border-green-500 transition duration-300 flex items-center group">
+                    <i data-lucide="list" class="w-5 h-5 mr-1 group-hover:scale-110 transition-transform"></i> Ma Liste
                 </a>
             </nav>
+            
             <div class="flex items-center space-x-6">
-                <button id="dark-mode-toggle" class="text-gray-300 hover:text-green-500 transition duration-300">
+                <button id="dark-mode-toggle" class="text-gray-300 hover:text-green-500 transition duration-300 p-2 rounded-full hover:bg-gray-800">
                     <i class="fas fa-moon"></i>
                 </button>
+                
                 <div class="relative">
-                    <button id="profile-dropdown-toggle" class="flex items-center space-x-2 text-gray-300 hover:text-green-500 transition duration-300">
-                        <img id="profile-pic-nav" src="images/profiles/default.svg" alt="Profil" class="w-8 h-8 rounded-full">
-                        <span id="nav-username">Utilisateur</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    <button id="profile-dropdown-toggle" class="flex items-center space-x-2 text-gray-300 hover:text-green-500 transition duration-300 group">
+                        <div class="relative">
+                            <img id="profile-pic-nav" src="images/profiles/default.svg" alt="Profil" 
+                                 class="w-8 h-8 rounded-full border-2 border-transparent group-hover:border-green-500 transition-colors">
+                            <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                        </div>
+                        <span id="nav-username" class="hidden md:inline">Utilisateur</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 group-hover:rotate-180 transition-transform"></i>
                     </button>
-                    <div class="profile-dropdown-content hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-1 z-50 border border-gray-700">
-                        <a href="profile.html" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors">
-                            <i data-lucide="user" class="w-4 h-4 inline mr-2"></i> Mon Profil
+                    <div class="profile-dropdown-content hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-xl py-1 z-50 border border-gray-700 animate-fade-in">
+                        <a href="profile.html" class="block px-4 py-3 text-sm text-gray-200 hover:bg-gray-700 transition-colors flex items-center">
+                            <i data-lucide="user" class="w-4 h-4 mr-2"></i> Mon Profil
                         </a>
-                        <a href="login.html" id="logout-button" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 rounded-md transition-colors">
-                            <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i> Déconnexion
+                        <a href="settings.html" class="block px-4 py-3 text-sm text-gray-200 hover:bg-gray-700 transition-colors flex items-center">
+                            <i data-lucide="settings" class="w-4 h-4 mr-2"></i> Paramètres
+                        </a>
+                        <div class="border-t border-gray-700 my-1"></div>
+                        <a href="login.html" id="logout-button" class="block px-4 py-3 text-sm text-red-400 hover:bg-red-900/20 transition-colors flex items-center">
+                            <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Déconnexion
                         </a>
                     </div>
                 </div>
@@ -100,21 +263,36 @@
     </header>
 
     <!-- CONTENU PRINCIPAL -->
-    <main class="container mx-auto px-4 pt-32 pb-20">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8">
-            <h2 class="text-5xl font-extrabold text-white mb-4 md:mb-0 flex items-center">
-                <i data-lucide="bookmark" class="w-12 h-12 text-green-500 mr-4"></i>
-                Ma Liste
-            </h2>
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div class="flex items-center">
+                <div class="relative">
+                    <i data-lucide="bookmark" class="w-16 h-16 text-green-500 mr-4"></i>
+                    <span id="list-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">0</span>
+                </div>
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white">Ma Liste</h2>
+                    <p id="list-stats" class="text-gray-400 mt-2">Chargement...</p>
+                </div>
+            </div>
             
             <!-- Contrôles de tri et filtre -->
-            <div class="flex flex-wrap gap-4">
+            <div class="flex flex-wrap gap-3">
+                <div class="relative flex-1 min-w-[200px]">
+                    <input type="text" id="searchInput" placeholder="Rechercher dans ma liste..." 
+                           class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <i data-lucide="search" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"></i>
+                </div>
+                
                 <div class="relative">
                     <select id="sortSelect" class="bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none pr-10">
                         <option value="added">Date d'ajout</option>
-                        <option value="title">Titre</option>
-                        <option value="year">Année</option>
-                        <option value="rating">Note</option>
+                        <option value="title">Titre A-Z</option>
+                        <option value="title-desc">Titre Z-A</option>
+                        <option value="year">Année récente</option>
+                        <option value="year-old">Année ancienne</option>
+                        <option value="rating">Note haute</option>
+                        <option value="rating-low">Note basse</option>
                     </select>
                     <i data-lucide="chevron-down" class="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none"></i>
                 </div>
@@ -124,35 +302,58 @@
                         <option value="all">Tous</option>
                         <option value="movies">Films</option>
                         <option value="series">Séries</option>
+                        <option value="watched">Déjà regardés</option>
+                        <option value="unwatched">Non regardés</option>
                     </select>
                     <i data-lucide="chevron-down" class="absolute right-3 top-3 h-4 w-4 text-gray-400 pointer-events-none"></i>
                 </div>
                 
-                <button id="clearFilters" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
-                    <i data-lucide="filter-x" class="w-4 h-4 mr-2"></i>
-                    Effacer
+                <button id="exportList" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center tooltip" data-tooltip="Exporter la liste">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                    <span class="hidden md:inline">Exporter</span>
                 </button>
             </div>
         </div>
 
-        <div id="myListContent">
+        <!-- Skeleton loading -->
+        <div id="skeletonLoading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            <div class="skeleton rounded-xl aspect-[2/3]"></div>
+            <div class="skeleton rounded-xl aspect-[2/3]"></div>
+            <div class="skeleton rounded-xl aspect-[2/3]"></div>
+            <div class="skeleton rounded-xl aspect-[2/3]"></div>
+            <div class="skeleton rounded-xl aspect-[2/3]"></div>
+            <div class="skeleton rounded-xl aspect-[2/3]"></div>
+        </div>
+
+        <div id="myListContent" class="animate-fade-in">
             <!-- Le contenu de la liste sera chargé dynamiquement -->
         </div>
 
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center items-center space-x-4 mt-8 hidden">
+            <button id="prevPage" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <span id="pageInfo" class="text-gray-300 text-sm">Page 1 sur 1</span>
+            <button id="nextPage" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition">
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+        </div>
+
         <!-- Message liste vide -->
-        <div id="emptyListMessage" class="text-center py-20 bg-gray-900 rounded-xl border border-gray-800 mt-8 hidden">
-            <i data-lucide="bookmark" class="w-16 h-16 mx-auto text-green-600 mb-4"></i>
+        <div id="emptyListMessage" class="text-center py-20 bg-gray-900/50 rounded-xl border border-gray-800 mt-8 hidden">
+            <i data-lucide="bookmark-x" class="w-24 h-24 mx-auto text-gray-600 mb-6"></i>
             <h3 class="text-2xl font-bold text-gray-300 mb-4">Votre liste est vide</h3>
-            <p class="text-gray-400 mb-6 max-w-md mx-auto">
-                Ajoutez vos films et séries préférés pour les retrouver facilement ici.
+            <p class="text-gray-400 mb-8 max-w-md mx-auto">
+                Commencez à constituer votre collection personnelle en ajoutant vos films et séries préférés.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="films.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 inline-flex items-center">
-                    <i data-lucide="clapperboard" class="w-5 h-5 mr-2"></i>
+                <a href="films.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-flex items-center group">
+                    <i data-lucide="clapperboard" class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform"></i>
                     Explorer les films
                 </a>
-                <a href="series.html" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300 inline-flex items-center">
-                    <i data-lucide="monitor" class="w-5 h-5 mr-2"></i>
+                <a href="series.html" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-flex items-center group">
+                    <i data-lucide="monitor" class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform"></i>
                     Découvrir les séries
                 </a>
             </div>
@@ -160,50 +361,79 @@
     </main>
 
     <!-- MODAL DÉTAILS -->
-    <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 p-4 hidden">
-        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+    <div id="itemModal" class="fixed inset-0 bg-black/95 flex justify-center items-center z-50 p-4 hidden animate-fade-in">
+        <div class="relative bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden animate-slide-in">
             <div class="flex justify-between items-center p-6 border-b border-gray-700">
-                <h3 id="modalItemTitle" class="text-2xl font-bold text-white">Titre</h3>
-                <button onclick="closeItemModal()" 
-                        class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
-                    <i data-lucide="x" class="h-6 w-6"></i>
-                </button>
+                <h3 id="modalItemTitle" class="text-2xl font-bold text-white truncate pr-4"></h3>
+                <div class="flex items-center space-x-2">
+                    <button onclick="toggleWatchedStatus()" id="markWatchedBtn"
+                            class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300 tooltip" 
+                            data-tooltip="Marquer comme regardé">
+                        <i data-lucide="eye" class="h-5 w-5"></i>
+                    </button>
+                    <button onclick="closeItemModal()" 
+                            class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+                        <i data-lucide="x" class="h-6 w-6"></i>
+                    </button>
+                </div>
             </div>
             
             <div class="p-6 overflow-y-auto max-h-[70vh]">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-1">
-                        <img id="modalItemImage" src="" alt="" class="w-full h-80 object-cover rounded-lg shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/400x600/1e293b/9ca3af?text=Image+Indisponible';">
+                        <div class="relative">
+                            <img id="modalItemImage" src="" alt="" 
+                                 class="w-full h-80 object-cover rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x600/1e293b/9ca3af?text=Image+Indisponible';"
+                                 onclick="zoomImage(this)">
+                            <div class="absolute top-2 right-2 flex flex-col gap-2">
+                                <span id="modalItemType" class="bg-green-600 px-3 py-1 rounded-full text-sm font-semibold"></span>
+                                <div class="flex items-center bg-black/80 px-2 py-1 rounded-lg">
+                                    <i data-lucide="star" class="h-4 w-4 text-yellow-400 fill-current mr-1"></i>
+                                    <span id="modalItemRating" class="text-sm font-semibold"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="md:col-span-2">
-                        <div class="flex flex-wrap items-center gap-4 mb-4">
+                        <div class="flex flex-wrap items-center gap-3 mb-4">
                             <span id="modalItemYear" class="text-lg font-semibold text-gray-300"></span>
-                            <span id="modalItemType" class="bg-green-600 px-3 py-1 rounded-full text-sm font-semibold"></span>
-                            <div class="flex items-center space-x-1">
-                                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-current"></i>
-                                <span id="modalItemRating" class="text-lg font-semibold"></span>
-                            </div>
-                            <span id="modalItemGenre" class="border border-gray-400 px-2 py-1 rounded text-sm"></span>
+                            <span id="modalItemGenre" class="border border-gray-400 px-3 py-1 rounded-full text-sm"></span>
+                            <span id="modalItemDuration" class="text-gray-400 text-sm flex items-center">
+                                <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                                <span id="durationText"></span>
+                            </span>
                         </div>
                         
                         <p id="modalItemSynopsis" class="text-gray-300 mb-6 leading-relaxed"></p>
                         
+                        <!-- Progression pour les séries -->
+                        <div id="seriesProgress" class="mb-6 hidden">
+                            <h4 class="font-semibold text-white mb-2">Progression</h4>
+                            <div class="flex items-center space-x-4">
+                                <div class="progress-bar flex-1">
+                                    <div id="progressFill" class="progress-bar-fill" style="width: 0%"></div>
+                                </div>
+                                <span id="progressText" class="text-sm text-gray-300">0/0 épisodes</span>
+                            </div>
+                        </div>
+                        
                         <div class="mb-6">
-                            <h4 class="font-semibold text-white mb-2">Ajouté à votre liste le :</h4>
+                            <h4 class="font-semibold text-white mb-2">Ajouté à votre liste :</h4>
                             <p id="modalItemAddedAt" class="text-gray-300"></p>
                         </div>
                         
                         <div class="flex flex-col sm:flex-row gap-4">
                             <button onclick="playItemTrailer()" 
-                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
-                                <i data-lucide="play" class="h-5 w-5"></i>
+                                    class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1 group">
+                                <i data-lucide="play" class="h-5 w-5 group-hover:scale-110 transition-transform"></i>
                                 <span>Voir le trailer</span>
                             </button>
                             <button id="removeFromListBtn" onclick="removeFromListModal()" 
-                                    class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1">
-                                <i data-lucide="trash-2" class="h-5 w-5"></i>
-                                <span>Retirer de ma liste</span>
+                                    class="bg-red-500/90 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 flex-1 group">
+                                <i data-lucide="trash-2" class="h-5 w-5 group-hover:scale-110 transition-transform"></i>
+                                <span>Retirer</span>
                             </button>
                         </div>
                     </div>
@@ -213,234 +443,373 @@
     </div>
 
     <!-- MODAL VIDÉO -->
-    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-95 flex justify-center items-center z-50 hidden">
-        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl">
+    <div id="videoModal" class="fixed inset-0 bg-black/95 flex justify-center items-center z-50 hidden animate-fade-in">
+        <div class="relative bg-gray-900 rounded-2xl shadow-2xl w-11/12 md:w-4/5 max-w-6xl animate-slide-in">
             <div class="flex justify-between items-center p-6 border-b border-gray-700">
-                <h3 id="modalTitle" class="text-xl font-bold">Lecture en cours</h3>
-                <button onclick="closeVideoModal()" 
-                        class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
-                    <i data-lucide="x" class="h-6 w-6"></i>
-                </button>
+                <h3 id="modalTitle" class="text-xl font-bold truncate pr-4"></h3>
+                <div class="flex items-center space-x-2">
+                    <button onclick="toggleVideoFullscreen()" 
+                            class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                        <i data-lucide="maximize" class="h-5 w-5"></i>
+                    </button>
+                    <button onclick="closeVideoModal()" 
+                            class="text-gray-400 hover:text-green-500 p-2 rounded-full hover:bg-gray-800 transition-all duration-300">
+                        <i data-lucide="x" class="h-6 w-6"></i>
+                    </button>
+                </div>
             </div>
-            <video id="videoPlayer" controls class="w-full rounded-b-2xl focus:outline-none">
-                Votre navigateur ne supporte pas la lecture vidéo.
-            </video>
+            <div class="aspect-video bg-black">
+                <video id="videoPlayer" controls class="w-full h-full rounded-b-2xl focus:outline-none">
+                    Votre navigateur ne supporte pas la lecture vidéo.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL IMAGE ZOOM -->
+    <div id="imageModal" class="fixed inset-0 bg-black/95 flex justify-center items-center z-50 hidden animate-fade-in">
+        <div class="relative max-w-4xl w-full p-4">
+            <button onclick="closeImageModal()" 
+                    class="absolute top-4 right-4 text-white hover:text-green-500 p-2 rounded-full hover:bg-white/10 transition-all duration-300 z-10">
+                <i data-lucide="x" class="h-8 w-8"></i>
+            </button>
+            <img id="zoomedImage" src="" alt="" class="w-full h-auto rounded-lg shadow-2xl">
         </div>
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-900 border-t border-green-900/30 py-8">
-        <div class="container mx-auto px-4 text-center text-gray-500">
-            <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
-            <p class="mt-2 text-sm">Votre plateforme de streaming préférée</p>
+    <footer class="bg-gray-900 border-t border-green-900/30 py-8 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i data-lucide="film" class="h-6 w-6 text-green-600"></i>
+                        <span class="text-xl font-bold">Streamflix</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Votre plateforme de streaming préférée</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Navigation</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-green-500 transition">Accueil</a></li>
+                        <li><a href="films.html" class="hover:text-green-500 transition">Films</a></li>
+                        <li><a href="series.html" class="hover:text-green-500 transition">Séries</a></li>
+                        <li><a href="my_list.html" class="hover:text-green-500 transition">Ma Liste</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Compte</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="profile.html" class="hover:text-green-500 transition">Mon Profil</a></li>
+                        <li><a href="settings.html" class="hover:text-green-500 transition">Paramètres</a></li>
+                        <li><a href="help.html" class="hover:text-green-500 transition">Aide</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 Streamflix. Tous droits réservés.</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Initialisation des icônes Lucide
-        lucide.createIcons();
+        // Configuration
+        const CONFIG = {
+            MY_LIST_STORAGE_KEY: 'streamflix_my_list_v2',
+            ITEMS_PER_PAGE: 12,
+            DEFAULT_IMAGE: 'https://placehold.co/400x600/1e293b/9ca3af?text=Image+Indisponible'
+        };
 
-        // Clé pour le stockage local
-        const MY_LIST_STORAGE_KEY = 'streamflix_my_list';
-
-        // Données de démonstration pour la liste (seront remplacées par le stockage local)
+        // Variables globales
         let myListData = [];
-
         let currentSelectedItem = null;
         let currentVideo = null;
         let currentSort = 'added';
         let currentFilter = 'all';
+        let currentSearch = '';
+        let currentPage = 1;
+        let totalPages = 1;
 
-        // Charger la liste au démarrage
+        // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            loadMyListFromStorage();
+            initializeApp();
+        });
+
+        async function initializeApp() {
+            // Initialisation des icônes Lucide
+            lucide.createIcons();
+            
+            // Chargement de la liste
+            await loadMyListFromStorage();
+            
+            // Configuration des événements
             setupEventListeners();
             setupThemeToggle();
-        });
+            
+            // Mise à jour de l'interface
+            updateListStats();
+            
+            // Cache le skeleton loading
+            setTimeout(() => {
+                document.getElementById('skeletonLoading').classList.add('hidden');
+            }, 500);
+        }
 
         // Configuration des écouteurs d'événements
         function setupEventListeners() {
+            // Mobile menu
+            document.getElementById('mobile-menu-toggle').addEventListener('click', toggleMobileMenu);
+            
+            // Recherche
+            document.getElementById('searchInput').addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase();
+                currentPage = 1;
+                loadMyList();
+            });
+            
             // Tri et filtrage
             document.getElementById('sortSelect').addEventListener('change', function() {
                 currentSort = this.value;
+                currentPage = 1;
                 loadMyList();
             });
             
             document.getElementById('filterSelect').addEventListener('change', function() {
                 currentFilter = this.value;
+                currentPage = 1;
                 loadMyList();
             });
             
-            document.getElementById('clearFilters').addEventListener('click', function() {
-                document.getElementById('sortSelect').value = 'added';
-                document.getElementById('filterSelect').value = 'all';
-                currentSort = 'added';
-                currentFilter = 'all';
-                loadMyList();
+            // Export
+            document.getElementById('exportList').addEventListener('click', exportList);
+            
+            // Pagination
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadMyList();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             });
             
-            // Gestion du profil
+            document.getElementById('nextPage').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    loadMyList();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+            
+            // Profil dropdown
             const profileDropdownToggle = document.getElementById('profile-dropdown-toggle');
             const profileDropdownContent = document.querySelector('.profile-dropdown-content');
-            const logoutButton = document.getElementById('logout-button');
 
-            if (profileDropdownToggle) {
-                profileDropdownToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    profileDropdownContent.classList.toggle('hidden');
-                });
-                
-                window.addEventListener('click', (e) => {
-                    if (!profileDropdownToggle.contains(e.target) && !profileDropdownContent.contains(e.target)) {
-                        profileDropdownContent.classList.add('hidden');
-                    }
-                });
-            }
-
-            if (logoutButton) {
-                logoutButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    // Logique de déconnexion
-                    window.location.href = 'login.html';
-                });
-            }
+            profileDropdownToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdownContent.classList.toggle('hidden');
+            });
+            
+            window.addEventListener('click', () => {
+                profileDropdownContent.classList.add('hidden');
+            });
         }
 
-        // Configuration du bouton de thème
+        // Thème sombre/clair
         function setupThemeToggle() {
             const darkModeToggle = document.getElementById('dark-mode-toggle');
-            const savedTheme = localStorage.getItem('theme');
+            const savedTheme = localStorage.getItem('streamflix_theme');
             
             if (savedTheme === 'light') {
                 document.body.classList.add('light-mode');
-                const icon = darkModeToggle.querySelector('i');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
+                updateThemeIcon('sun');
             }
             
             darkModeToggle.addEventListener('click', () => {
                 document.body.classList.toggle('light-mode');
-                const icon = darkModeToggle.querySelector('i');
-                if (document.body.classList.contains('light-mode')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'dark');
-                }
+                const isLightMode = document.body.classList.contains('light-mode');
+                localStorage.setItem('streamflix_theme', isLightMode ? 'light' : 'dark');
+                updateThemeIcon(isLightMode ? 'sun' : 'moon');
             });
         }
 
-        // Charger la liste depuis le stockage local
-        function loadMyListFromStorage() {
-            const storedList = localStorage.getItem(MY_LIST_STORAGE_KEY);
-            if (storedList) {
-                myListData = JSON.parse(storedList);
+        function updateThemeIcon(icon) {
+            const toggle = document.getElementById('dark-mode-toggle');
+            const iconElement = toggle.querySelector('i');
+            iconElement.className = icon === 'sun' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Menu mobile
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.querySelector('#mobile-menu-toggle i');
+            
+            menu.classList.toggle('hidden');
+            const isOpen = !menu.classList.contains('hidden');
+            
+            if (isOpen) {
+                icon.setAttribute('data-lucide', 'x');
             } else {
-                // Données par défaut si aucune donnée n'est stockée
-                myListData = [
-                    {
-                        'id': 1,
-                        'title': 'Inception',
-                        'image_url': 'img/photo_2025-11-02_09-17-50.jpg',
-                        'year': 2010,
-                        'rating': 8.8,
-                        'genre': 'Science-Fiction',
-                        'synopsis': 'Un voleur qui s\'infiltre dans les rêves.',
-                        'content_type': 'movies',
-                        'trailer_url': 'assets/videos/inception.mp4',
-                        'added_at': '2024-01-15 10:30:00'
-                    },
-                    {
-                        'id': 2,
-                        'title': 'Stranger Things',
-                        'image_url': 'img/stranger-things.jpg',
-                        'year': 2016,
-                        'rating': 8.7,
-                        'genre': 'Science-Fiction, Horreur',
-                        'synopsis': 'Des événements étranges se produisent dans une petite ville.',
-                        'content_type': 'series',
-                        'trailer_url': 'assets/videos/stranger-things.mp4',
-                        'added_at': '2024-01-10 14:20:00'
-                    }
-                ];
-                saveMyListToStorage();
+                icon.setAttribute('data-lucide', 'menu');
             }
+            lucide.createIcons();
+        }
+
+        // Chargement des données
+        async function loadMyListFromStorage() {
+            try {
+                const storedList = localStorage.getItem(CONFIG.MY_LIST_STORAGE_KEY);
+                if (storedList) {
+                    myListData = JSON.parse(storedList);
+                } else {
+                    // Données de démonstration
+                    myListData = await fetchDemoData();
+                    saveMyListToStorage();
+                }
+            } catch (error) {
+                console.error('Erreur de chargement:', error);
+                myListData = [];
+            }
+            
             loadMyList();
         }
 
-        // Sauvegarder la liste dans le stockage local
-        function saveMyListToStorage() {
-            localStorage.setItem(MY_LIST_STORAGE_KEY, JSON.stringify(myListData));
+        async function fetchDemoData() {
+            // Simulation de données asynchrones
+            return [
+                {
+                    id: 1,
+                    title: 'Inception',
+                    image_url: 'img/photo_2025-11-02_09-17-50.jpg',
+                    year: 2010,
+                    rating: 8.8,
+                    genre: 'Science-Fiction, Thriller',
+                    synopsis: 'Un voleur qui s\'infiltre dans les rêves.',
+                    content_type: 'movies',
+                    duration: '148 min',
+                    trailer_url: 'assets/videos/inception.mp4',
+                    added_at: new Date().toISOString(),
+                    watched: false
+                },
+                {
+                    id: 2,
+                    title: 'Stranger Things',
+                    image_url: 'img/stranger-things.jpg',
+                    year: 2016,
+                    rating: 8.7,
+                    genre: 'Science-Fiction, Horreur',
+                    synopsis: 'Des événements étranges se produisent dans une petite ville.',
+                    content_type: 'series',
+                    duration: '4 saisons',
+                    episodes_total: 34,
+                    episodes_watched: 15,
+                    trailer_url: 'assets/videos/stranger-things.mp4',
+                    added_at: new Date(Date.now() - 86400000).toISOString(),
+                    watched: false
+                }
+            ];
         }
 
-        // Trier et filtrer les données
-        function getSortedAndFilteredData() {
-            let filteredData = myListData;
+        // Sauvegarde des données
+        function saveMyListToStorage() {
+            localStorage.setItem(CONFIG.MY_LIST_STORAGE_KEY, JSON.stringify(myListData));
+            updateListStats();
+        }
+
+        // Filtrage et tri
+        function getFilteredAndSortedData() {
+            let filtered = [...myListData];
             
-            // Appliquer le filtre
-            if (currentFilter !== 'all') {
-                filteredData = filteredData.filter(item => item.content_type === currentFilter);
+            // Filtre par type
+            if (currentFilter === 'movies') {
+                filtered = filtered.filter(item => item.content_type === 'movies');
+            } else if (currentFilter === 'series') {
+                filtered = filtered.filter(item => item.content_type === 'series');
+            } else if (currentFilter === 'watched') {
+                filtered = filtered.filter(item => item.watched);
+            } else if (currentFilter === 'unwatched') {
+                filtered = filtered.filter(item => !item.watched);
             }
             
-            // Appliquer le tri
-            filteredData.sort((a, b) => {
+            // Recherche
+            if (currentSearch) {
+                filtered = filtered.filter(item => 
+                    item.title.toLowerCase().includes(currentSearch) ||
+                    item.genre.toLowerCase().includes(currentSearch) ||
+                    item.year.toString().includes(currentSearch)
+                );
+            }
+            
+            // Tri
+            filtered.sort((a, b) => {
                 switch(currentSort) {
                     case 'title':
                         return a.title.localeCompare(b.title);
+                    case 'title-desc':
+                        return b.title.localeCompare(a.title);
                     case 'year':
                         return b.year - a.year;
+                    case 'year-old':
+                        return a.year - b.year;
                     case 'rating':
                         return b.rating - a.rating;
+                    case 'rating-low':
+                        return a.rating - b.rating;
                     case 'added':
                     default:
                         return new Date(b.added_at) - new Date(a.added_at);
                 }
             });
             
-            return filteredData;
+            return filtered;
         }
 
-        // Charger et afficher la liste
+        // Affichage de la liste
         function loadMyList() {
             const myListContent = document.getElementById('myListContent');
             const emptyListMessage = document.getElementById('emptyListMessage');
+            const pagination = document.getElementById('pagination');
             
-            // Supprimer l'ancien compteur s'il existe
-            const oldCounter = document.querySelector('.list-counter');
-            if (oldCounter) {
-                oldCounter.remove();
-            }
-
-            const filteredData = getSortedAndFilteredData();
+            const filteredData = getFilteredAndSortedData();
+            totalPages = Math.ceil(filteredData.length / CONFIG.ITEMS_PER_PAGE);
             
             if (filteredData.length === 0) {
                 myListContent.innerHTML = '';
                 emptyListMessage.classList.remove('hidden');
+                pagination.classList.add('hidden');
                 return;
             }
-
+            
             emptyListMessage.classList.add('hidden');
-
-            // Ajouter le compteur
-            const countDiv = document.createElement('div');
-            countDiv.className = 'list-counter mb-6 text-gray-300 text-lg';
-            countDiv.innerHTML = `<p>Vous avez ${filteredData.length} élément(s) dans votre liste</p>`;
-            myListContent.parentNode.insertBefore(countDiv, myListContent);
-
-            // Afficher les éléments
+            
+            // Pagination
+            const startIndex = (currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
+            const endIndex = startIndex + CONFIG.ITEMS_PER_PAGE;
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            // Mise à jour de la pagination
+            updatePagination(filteredData.length);
+            
+            // Génération du HTML
             myListContent.innerHTML = `
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                    ${filteredData.map(item => `
+                    ${pageData.map(item => `
                         <div class="content-card group relative rounded-xl overflow-hidden bg-gray-800 border border-gray-700 cursor-pointer aspect-[2/3]"
-                             onclick="showItemDetails(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                             onclick="showItemDetails(${JSON.stringify(item).replace(/"/g, '&quot;')})"
+                             data-watched="${item.watched}">
                             <div class="relative w-full h-full">
-                                <img src="${item.image_url}" 
+                                <img src="${item.image_url || CONFIG.DEFAULT_IMAGE}" 
                                      alt="${item.title}"
                                      class="w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-40"
-                                     onerror="this.onerror=null;this.src='https://placehold.co/400x600/1e293b/9ca3af?text=Image+Indisponible';">
+                                     onerror="this.onerror=null;this.src='${CONFIG.DEFAULT_IMAGE}';">
+                                
+                                ${item.watched ? `
+                                    <div class="absolute inset-0 bg-green-900/20 flex items-center justify-center">
+                                        <div class="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                            <i data-lucide="check" class="w-4 h-4 inline mr-1"></i>
+                                            Vu
+                                        </div>
+                                    </div>
+                                ` : ''}
                                 
                                 <!-- Badge type -->
                                 <div class="absolute top-3 left-3">
@@ -459,16 +828,16 @@
                                 
                                 <!-- Overlay au hover -->
                                 <div class="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <h3 class="text-lg font-bold text-green-400 mb-1">${item.title}</h3>
+                                    <h3 class="text-lg font-bold text-green-400 mb-1 truncate">${item.title}</h3>
                                     <div class="flex items-center text-sm text-gray-300 space-x-2 mb-2">
                                         <span>${item.year}</span>
                                         <span>•</span>
-                                        <span>${item.genre}</span>
+                                        <span class="truncate">${item.genre}</span>
                                     </div>
                                     <div class="flex justify-between items-center text-xs text-gray-400">
-                                        <span>Ajouté le ${formatDate(item.added_at)}</span>
+                                        <span>${formatDate(item.added_at)}</span>
                                         <button onclick="event.stopPropagation(); removeFromList(${item.id}, '${item.content_type}')" 
-                                                class="text-red-400 hover:text-red-300 transition duration-300">
+                                                class="text-red-400 hover:text-red-300 transition duration-300 p-1 hover:bg-red-900/20 rounded">
                                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                                         </button>
                                     </div>
@@ -478,71 +847,130 @@
                     `).join('')}
                 </div>
             `;
-
+            
             lucide.createIcons();
+            updateListStats();
         }
 
-        // Formater la date
+        // Mise à jour de la pagination
+        function updatePagination(totalItems) {
+            const pagination = document.getElementById('pagination');
+            const pageInfo = document.getElementById('pageInfo');
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
+            
+            if (totalItems > CONFIG.ITEMS_PER_PAGE) {
+                pagination.classList.remove('hidden');
+                pageInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+                prevButton.disabled = currentPage === 1;
+                nextButton.disabled = currentPage === totalPages;
+            } else {
+                pagination.classList.add('hidden');
+            }
+        }
+
+        // Mise à jour des statistiques
+        function updateListStats() {
+            const statsElement = document.getElementById('list-stats');
+            const badgeElement = document.getElementById('list-count-badge');
+            
+            if (!statsElement || !badgeElement) return;
+            
+            const movies = myListData.filter(item => item.content_type === 'movies').length;
+            const series = myListData.filter(item => item.content_type === 'series').length;
+            const watched = myListData.filter(item => item.watched).length;
+            
+            statsElement.textContent = `${movies} films • ${series} séries • ${watched} regardés`;
+            badgeElement.textContent = myListData.length;
+        }
+
+        // Formatage de date
         function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleDateString('fr-FR');
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return "Aujourd'hui";
+            if (diffDays === 1) return 'Hier';
+            if (diffDays < 7) return `Il y a ${diffDays} jours`;
+            
+            return date.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
         }
 
-        // Afficher les détails d'un élément dans la modale
+        // Gestion des modales
         function showItemDetails(item) {
             currentSelectedItem = item;
             
             const modal = document.getElementById('itemModal');
+            const seriesProgress = document.getElementById('seriesProgress');
+            
+            // Remplir les informations
             document.getElementById('modalItemTitle').textContent = item.title;
-            document.getElementById('modalItemImage').src = item.image_url;
-            document.getElementById('modalItemImage').alt = item.title;
+            document.getElementById('modalItemImage').src = item.image_url || CONFIG.DEFAULT_IMAGE;
             document.getElementById('modalItemYear').textContent = item.year;
             document.getElementById('modalItemType').textContent = item.content_type === 'movies' ? 'FILM' : 'SÉRIE';
             document.getElementById('modalItemRating').textContent = item.rating;
             document.getElementById('modalItemGenre').textContent = item.genre;
             document.getElementById('modalItemSynopsis').textContent = item.synopsis;
             document.getElementById('modalItemAddedAt').textContent = formatDate(item.added_at);
+            document.getElementById('durationText').textContent = item.duration || 'N/A';
+            
+            // Mettre à jour le bouton "vu"
+            const watchBtn = document.getElementById('markWatchedBtn');
+            const watchIcon = watchBtn.querySelector('i');
+            watchBtn.setAttribute('data-tooltip', item.watched ? 'Marquer comme non regardé' : 'Marquer comme regardé');
+            watchIcon.setAttribute('data-lucide', item.watched ? 'eye-off' : 'eye');
+            lucide.createIcons();
+            
+            // Gérer la progression pour les séries
+            if (item.content_type === 'series' && item.episodes_total) {
+                seriesProgress.classList.remove('hidden');
+                const progress = item.episodes_watched || 0;
+                const percentage = (progress / item.episodes_total) * 100;
+                document.getElementById('progressFill').style.width = `${percentage}%`;
+                document.getElementById('progressText').textContent = `${progress}/${item.episodes_total} épisodes`;
+            } else {
+                seriesProgress.classList.add('hidden');
+            }
             
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
-        // Fermer la modale
         function closeItemModal() {
-            const modal = document.getElementById('itemModal');
-            modal.classList.add('hidden');
+            document.getElementById('itemModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
             currentSelectedItem = null;
         }
 
-        // Gestion de la modal vidéo
-        function openVideoModal(videoSrc, title) {
-            const modal = document.getElementById('videoModal');
-            const player = document.getElementById('videoPlayer');
-            const modalTitle = document.getElementById('modalTitle');
+        function toggleWatchedStatus() {
+            if (!currentSelectedItem) return;
             
-            currentVideo = player;
+            const index = myListData.findIndex(item => 
+                item.id === currentSelectedItem.id && 
+                item.content_type === currentSelectedItem.content_type
+            );
             
-            if (title) {
-                modalTitle.textContent = title;
+            if (index !== -1) {
+                myListData[index].watched = !myListData[index].watched;
+                saveMyListToStorage();
+                loadMyList();
+                showItemDetails(myListData[index]);
+                showNotification(
+                    myListData[index].watched ? 
+                    '✅ Marqué comme regardé' : 
+                    '↩️ Marqué comme non regardé',
+                    'success'
+                );
             }
-            
-            player.src = videoSrc;
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeVideoModal() {
-            const modal = document.getElementById('videoModal');
-            modal.classList.add('hidden');
-            if (currentVideo) {
-                currentVideo.pause();
-                currentVideo.src = '';
-            }
-            document.body.style.overflow = 'auto';
         }
 
-        // Jouer le trailer depuis la modale
+        // Gestion vidéo
         function playItemTrailer() {
             if (currentSelectedItem && currentSelectedItem.trailer_url) {
                 openVideoModal(currentSelectedItem.trailer_url, currentSelectedItem.title);
@@ -551,32 +979,99 @@
             }
         }
 
-        // Supprimer un élément de la liste depuis la modale
-        function removeFromListModal() {
-            if (currentSelectedItem) {
-                removeFromList(currentSelectedItem.id, currentSelectedItem.content_type);
-                closeItemModal();
+        function openVideoModal(videoSrc, title) {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            
+            document.getElementById('modalTitle').textContent = title;
+            player.src = videoSrc;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Lancer la lecture automatique
+            setTimeout(() => player.play().catch(() => {}), 300);
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const player = document.getElementById('videoPlayer');
+            
+            player.pause();
+            player.src = '';
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleVideoFullscreen() {
+            const player = document.getElementById('videoPlayer');
+            if (!document.fullscreenElement) {
+                player.requestFullscreen().catch(err => {
+                    console.error(`Erreur fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
             }
         }
 
-        // Supprimer un élément de la liste
+        // Zoom d'image
+        function zoomImage(imgElement) {
+            const modal = document.getElementById('imageModal');
+            const zoomedImg = document.getElementById('zoomedImage');
+            
+            zoomedImg.src = imgElement.src;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gestion de la liste
         function removeFromList(id, type) {
             if (confirm('Êtes-vous sûr de vouloir retirer cet élément de votre liste ?')) {
-                // Retirer l'élément des données
                 const index = myListData.findIndex(item => item.id === id && item.content_type === type);
                 if (index !== -1) {
                     myListData.splice(index, 1);
                     saveMyListToStorage();
+                    loadMyList();
                     showNotification('🗑️ Élément retiré de votre liste', 'success');
+                    
+                    if (currentSelectedItem && currentSelectedItem.id === id) {
+                        closeItemModal();
+                    }
                 }
-                
-                // Recharger l'affichage
-                loadMyList();
             }
         }
 
-        // Afficher une notification
+        function removeFromListModal() {
+            if (currentSelectedItem) {
+                removeFromList(currentSelectedItem.id, currentSelectedItem.content_type);
+            }
+        }
+
+        // Export
+        function exportList() {
+            const dataStr = JSON.stringify(myListData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `streamflix_ma_liste_${new Date().toISOString().split('T')[0]}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('📥 Liste exportée avec succès', 'success');
+        }
+
+        // Notifications
         function showNotification(message, type = 'info') {
+            // Supprimer les notifications existantes
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
             const colors = {
                 success: 'bg-green-600',
                 error: 'bg-red-600',
@@ -584,29 +1079,37 @@
             };
             
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 ${colors[type] || colors.info} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in`;
+            notification.className = `notification fixed top-4 right-4 ${colors[type] || colors.info} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
             notification.innerHTML = `
-                <div class="flex items-center">
+                <div class="flex items-center space-x-2">
                     <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-2 hover:opacity-80">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
                 </div>
             `;
+            
             document.body.appendChild(notification);
+            lucide.createIcons();
             
             setTimeout(() => {
-                notification.remove();
+                if (notification.parentElement) {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    setTimeout(() => notification.remove(), 300);
+                }
             }, 3000);
         }
 
-        // Fonction pour ajouter un élément à la liste (appelée depuis index.html)
-        function addToMyList(itemData) {
-            // Vérifier si l'élément existe déjà
+        // API pour les autres pages
+        window.addToMyList = function(itemData) {
             const exists = myListData.some(item => 
                 item.id === itemData.id && item.content_type === itemData.content_type
             );
             
             if (!exists) {
-                // Ajouter la date d'ajout
                 itemData.added_at = new Date().toISOString();
+                itemData.watched = false;
                 myListData.push(itemData);
                 saveMyListToStorage();
                 showNotification('✅ Ajouté à votre liste !', 'success');
@@ -615,32 +1118,32 @@
                 showNotification('ℹ️ Déjà dans votre liste', 'info');
                 return false;
             }
-        }
+        };
 
-        // Fonction pour vérifier si un élément est dans la liste
-        function isInMyList(id, type) {
+        window.isInMyList = function(id, type) {
             return myListData.some(item => item.id === id && item.content_type === type);
-        }
+        };
 
-        // Fermer les modales avec ESC
+        // Fermeture avec ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeItemModal();
                 closeVideoModal();
+                closeImageModal();
             }
         });
 
-        // Fermer les modales en cliquant à l'extérieur
+        // Fermeture en cliquant à l'extérieur
         document.getElementById('itemModal').addEventListener('click', (e) => {
-            if (e.target.id === 'itemModal') {
-                closeItemModal();
-            }
+            if (e.target.id === 'itemModal') closeItemModal();
         });
 
         document.getElementById('videoModal').addEventListener('click', (e) => {
-            if (e.target.id === 'videoModal') {
-                closeVideoModal();
-            }
+            if (e.target.id === 'videoModal') closeVideoModal();
+        });
+
+        document.getElementById('imageModal').addEventListener('click', (e) => {
+            if (e.target.id === 'imageModal') closeImageModal();
         });
     </script>
 </body>
